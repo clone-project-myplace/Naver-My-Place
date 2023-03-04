@@ -2,7 +2,7 @@ import ReactDOM from "react-dom/client";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
-import Router from "./pages/router";
+import Router from "./pages/Router";
 import { QueryClient, QueryClientProvider } from "react-query";
 
 const queryClient = new QueryClient();
