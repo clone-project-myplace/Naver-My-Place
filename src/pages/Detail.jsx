@@ -6,13 +6,22 @@ import { deleteReview, getDetail } from "../api/getDetail";
 function Detail() {
     const { id } = useParams();
 
+
     const queryClient = useQueryClient();
 
-    // const mutation = useMutation(deleteReview, {
-    //     onSuccess: () => {
-    //         queryClient.invalidateQueries("getReview");
-    //     },
-    // });
+    const { mutate: deleteReviewMutate } = useMutation(
+        () =>
+            deleteReview(
+                detailData.reviewId,
+                localStorage.getItem("accessToken")
+            ),
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries("getReview");
+                console.log("Item deleted");
+            },
+        }
+    );
 
     const { isLoading, isError, data } = useQuery(["getReview"], () =>
         getDetail(id)
@@ -34,10 +43,9 @@ function Detail() {
         return <h1>에러가 발생했습니다.</h1>;
     }
 
-    // const handleDelete = (itemId) => {
-    //     const token = localStorage.getItem("token");
-    //     deleteMutation(itemId, { token });
-    // };
+    const handleDelete = () => {
+        deleteReviewMutate();
+    };
 
     return (
         <>
@@ -50,13 +58,13 @@ function Detail() {
             >
                 수정하기
             </button>
-            {/* <button
+            <button
                 onClick={() => {
                     handleDelete;
                 }}
             >
                 삭제하기
-            </button> */}
+            </button>
 
             <div>{detailData.memberName}</div>
             <div>{detailData.restaurantName}</div>
