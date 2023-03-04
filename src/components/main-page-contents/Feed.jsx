@@ -18,7 +18,7 @@ const Feed = () => {
   }
 
   return (
-    <div>
+    <div style={{ height: "1000px" }}>
       MainPage
       {data?.data.map((item) => (
         <FeedCard item={item} />
