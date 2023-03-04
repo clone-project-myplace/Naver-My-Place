@@ -2,15 +2,19 @@ import ReactDOM from "react-dom/client";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
-import Router from "./pages/router";
 import { QueryClient, QueryClientProvider } from "react-query";
+import App from "./App";
+import { Provider } from "react-redux";
+import store from "./contexts/configStore";
 
 const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <QueryClientProvider client={queryClient}>
-    <Router />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </QueryClientProvider>
 );
 
