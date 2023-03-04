@@ -5,8 +5,10 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useQuery } from "react-query";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
+  const navigate = useNavigate();
   const { register, handleSubmit } = useForm();
 
   const postSignup = (data) => {
@@ -14,6 +16,7 @@ const Signup = () => {
       .post(`${process.env.REACT_APP_BASE_URL}/members/signup`, data)
       .then((res) => {
         console.log(res);
+        navigate("/login");
       })
       .catch((err) => console.log(err));
   };

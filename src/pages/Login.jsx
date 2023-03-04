@@ -3,8 +3,10 @@ import styled from "styled-components";
 import { naverColorCode } from "../constants/colorCode";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -16,6 +18,7 @@ const Login = () => {
       .post(`${process.env.REACT_APP_BASE_URL}/members/login`, data)
       .then((res) => {
         console.log(res);
+        navigate("/");
       })
       .catch((err) => console.log(err));
   };
