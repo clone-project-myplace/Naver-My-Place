@@ -30,6 +30,7 @@ const Signup = () => {
           <input
             type="text"
             placeholder="아이디"
+
             {...register("memberId", { required: "아이디를 입력해주세요" })}
           />
         </div>

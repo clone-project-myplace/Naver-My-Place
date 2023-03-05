@@ -9,6 +9,7 @@ import Detail from "../pages/Detail"
 const Router = () => {
   return (
     <BrowserRouter>
+      <Navbar />
       <Routes>
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
