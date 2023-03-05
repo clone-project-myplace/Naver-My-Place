@@ -3,52 +3,42 @@ import styled from "styled-components";
 import { naverColorCode } from "../constants/colorCode";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { useQuery } from "react-query";
-import LoadingSpinner from "../components/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
 
-const Signup = () => {
+const Login = () => {
   const navigate = useNavigate();
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  const postSignup = (data) => {
-    console.log(data);
+  const postLogin = (data) => {
     axios
-      .post(`${process.env.REACT_APP_BASEURL}/members/signup`, data)
+      .post(`${process.env.REACT_APP_BASE_URL}/members/login`, data)
       .then((res) => {
         console.log(res);
-        navigate("/login");
+        navigate("/");
       })
-      .catch((err) => console.log("err : ", err));
+      .catch((err) => console.log(err));
   };
-
   return (
     <div>
-      <form onSubmit={handleSubmit((data) => postSignup(data))}>
+      <form onSubmit={handleSubmit((data) => postLogin(data))}>
         <LogoStyle>NAVER</LogoStyle>
         <div>
           <input
             type="text"
             placeholder="아이디"
-
-            {...register("memberId", { required: "아이디를 입력해주세요" })}
+            {...register("userId", { required: "아이디를 입력해주세요" })}
           />
         </div>
         <div>
           <input
             type="password"
             placeholder="비밀번호"
-            {...register("memberPw", {
+            {...register("userPassword", {
               required: "비밀번호를 입력해주세요",
-            })}
-          />
-        </div>
-        <div>
-          <input
-            type="text"
-            placeholder="닉네임"
-            {...register("memberName", {
-              required: "닉네임을 입력해주세요",
             })}
           />
         </div>
@@ -56,12 +46,11 @@ const Signup = () => {
           <input type="submit" />
         </div>
       </form>
-      <LoadingSpinner />
     </div>
   );
 };
 
-export default Signup;
+export default Login;
 
 const LogoStyle = styled.div`
   color: ${naverColorCode};
