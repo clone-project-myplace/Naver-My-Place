@@ -30,48 +30,46 @@ const MainPage = () => {
 
   return (
     <div style={{ height: "1000px" }}>
-      <NavigationBox>
-        <TopLogoArea>
-          <div>MY 플레이스</div>
-          <div>쿠폰 =</div>
-        </TopLogoArea>
-        <MyProfileArea>
-          {token === null ? (
-            <div
-              style={{
-                position: "relative",
-                right: "60px",
-                marginBottom: "20px",
-              }}
-            >
-              <img
-                style={ProfileImg}
-                src={defaultProfileImg}
-                alt="profile image"
-              />
-              <LoginButton onClick={onLoginButtonHandler}>
-                로그인하기 {">"}
-              </LoginButton>
-            </div>
-          ) : (
-            <div>로그인됨</div>
-          )}
-          <div>
-            <ReviewWriteButton>리뷰 쓰기</ReviewWriteButton>
+      <TopLogoArea>
+        <div style={{ position: "sticky", top: "0px" }}>MY 플레이스</div>
+        <div>쿠폰 =</div>
+      </TopLogoArea>
+      <MyProfileArea>
+        {token === null ? (
+          <div
+            style={{
+              position: "relative",
+              right: "60px",
+              marginBottom: "20px",
+            }}
+          >
+            <img
+              style={ProfileImg}
+              src={defaultProfileImg}
+              alt="profile image"
+            />
+            <LoginButton onClick={onLoginButtonHandler}>
+              로그인하기 {">"}
+            </LoginButton>
           </div>
-        </MyProfileArea>
-        <TabsArea>
-          {tabNameList.map((item, i) => (
-            <Tab
-              key={i}
-              selectedTab={selectedTab}
-              onClick={() => changeTabHandler(i)}
-            >
-              {item}
-            </Tab>
-          ))}
-        </TabsArea>
-      </NavigationBox>
+        ) : (
+          <div>로그인됨</div>
+        )}
+        <div>
+          <ReviewWriteButton>리뷰 쓰기</ReviewWriteButton>
+        </div>
+      </MyProfileArea>
+      <TabsArea>
+        {tabNameList.map((item, i) => (
+          <Tab
+            key={i}
+            selectedTab={selectedTab}
+            onClick={() => changeTabHandler(i)}
+          >
+            {item}
+          </Tab>
+        ))}
+      </TabsArea>
     </div>
   );
 
@@ -118,6 +116,7 @@ const LoginButton = styled.span`
 `;
 
 const TopLogoArea = styled.div`
+  background-color: ${navbarColorCode};
   height: 53px;
   display: flex;
   justify-content: space-between;
@@ -126,18 +125,18 @@ const TopLogoArea = styled.div`
 `;
 
 const MyProfileArea = styled.div`
+  background-color: ${navbarColorCode};
   height: 159px;
   padding: 10px;
   text-align: center;
 `;
 
 const TabsArea = styled.div`
+  background-color: ${navbarColorCode};
   display: flex;
   height: 51px;
   justify-content: space-around;
   width: 300px;
   text-align: center;
   margin: 0 auto;
-  position: sticky;
-  top: 0;
 `;
