@@ -14,10 +14,13 @@ const Login = () => {
   } = useForm();
 
   const postLogin = (data) => {
+    const userInfo = { memberId: data.memberId, memberPw: data.memberPw };
+    console.log(userInfo);
     axios
-      .post(`${process.env.REACT_APP_BASE_URL}/members/login`, data)
+      .post(`${process.env.REACT_APP_BASEURL}/api/members/login`, data)
       .then((res) => {
-        console.log(res);
+        window.localStorage.setItem("accessToken", res.headers.authorization);
+        console.log("res.headers.authorization : ", res.headers.authorization);
         navigate("/");
       })
       .catch((err) => console.log(err));
@@ -30,14 +33,14 @@ const Login = () => {
           <input
             type="text"
             placeholder="아이디"
-            {...register("userId", { required: "아이디를 입력해주세요" })}
+            {...register("memberId", { required: "아이디를 입력해주세요" })}
           />
         </div>
         <div>
           <input
             type="password"
             placeholder="비밀번호"
-            {...register("userPassword", {
+            {...register("memberPw", {
               required: "비밀번호를 입력해주세요",
             })}
           />
