@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { naverColorCode } from "../constants/colorCode";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { useQuery } from "react-query";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
 
@@ -14,7 +13,7 @@ const Signup = () => {
   const postSignup = (data) => {
     console.log(data);
     axios
-      .post(`${process.env.REACT_APP_BASEURL}/members/signup`, data)
+      .post(`${process.env.REACT_APP_BASEURL}/api/members/signup`, data)
       .then((res) => {
         console.log(res);
         navigate("/login");
