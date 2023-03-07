@@ -6,8 +6,12 @@ import { useState } from "react";
 import { useQueryClient } from "react-query";
 import DeleteModal from "./DeleteModal";
 import UserProfile from "../UserProfile";
+import { useMutation } from "react-query";
+import { deleteReview } from "../../api/getDetail";
+import { getDate } from "../../utils/getDate";
 
 const DetailCard = ({ detailData }) => {
+    console.log(detailData);
     const [showButtons, setShowButtons] = useState(false);
     const [confirmDelete, setConfirmDelete] = useState(false);
     const navigate = useNavigate();
@@ -16,19 +20,27 @@ const DetailCard = ({ detailData }) => {
 
     const queryClient = useQueryClient();
 
-    // const { mutate: deleteReviewMutate } = useMutation(
-    //     () =>
-    //         deleteReview(
-    //             detailData.reviewId,
-    //             localStorage.getItem("accessToken")
-    //         ),
-    //     {
-    //         onSuccess: () => {
-    //             queryClient.invalidateQueries("getReview");
-    //             console.log("Item deleted");
-    //         },
-    //     }
-    // );
+    const { mutate: deleteReviewMutate } = useMutation(
+        () =>
+            deleteReview(
+                detailData.reviewId,
+                localStorage.getItem("accessToken")
+            ),
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries("getReview");
+                console.log("Item deleted");
+            },
+        }
+    );
+
+    const navToEditButton = () => {
+        console.log("버튼 동작?");
+        console.log(detailData);
+        navigate("/write/edit", {
+            state: { detailData },
+        });
+    };
 
     const handleEllipsisButtonModal = () => {
         setShowButtons(!showButtons);
@@ -48,7 +60,7 @@ const DetailCard = ({ detailData }) => {
     };
 
     const handleDelete = () => {
-        // deleteReviewMutate();
+        deleteReviewMutate();
         navigate("/");
     };
 
@@ -65,14 +77,12 @@ const DetailCard = ({ detailData }) => {
                     />
                 </BsThreeDotsVerticalStyle>
             </OuterBox>
-            <div style={{position:"relative"}}>
+            <div style={{ position: "relative" }}>
                 <ButtonBox>
                     {showButtons && (
                         <>
                             <ButtonContainer>
-                                <EachButton
-                                    onClick={() => alert("여기서 수정화면으로")}
-                                >
+                                <EachButton onClick={navToEditButton}>
                                     수정하기
                                 </EachButton>
                             </ButtonContainer>
@@ -96,20 +106,18 @@ const DetailCard = ({ detailData }) => {
             </div>
 
             <ImgBox>
-                <StCardContentPicture
-                    // src={detailData.imgUrl}
-                    src='https://pup-review-phinf.pstatic.net/MjAyMzAzMDZfMTQ3/MDAxNjc4MDgwMDU3MDUw.S-7WQ-8rC6FcvN5_KtEAdqubxs_nXzZ7uhv94RkDSZkg.8xoZ5_5SdhqRb_zeg8ysvT3F1A8bi7zGppO6TD-n3Sog.JPEG/2C860D91-1E4B-492E-B71C-D1C1EDBA67EF.jpeg?type=w828_60_sharpen'
-                />
+                <StCardContentPicture src={detailData?.reviewImgUrl} />
             </ImgBox>
-            <Desc>
-                신촌 새로 생긴 맛집인데 가볍게 술먹기 넘 좋아요! 안주도 다
-                맛있어요!
-            </Desc>
+            <Desc>{detailData?.reviewContents}</Desc>
             <Tag>
-                <TagButton>음식이 맛있어요</TagButton>
-                <TagButton>기분이 좋아요</TagButton>
+                {detailData?.keywordList.map((item, index) => {
+                    return <TagButton key={index}> {item} </TagButton>;
+                })}
+                {/*map으로 데이터 꺼내주기 */}
+                {/* <TagButton>음식이 맛있어요</TagButton>
+                <TagButton>기분이 좋아요</TagButton> */}
             </Tag>
-            <Footer>2023-03-03</Footer>
+            <Footer>{getDate(detailData?.createdDate)}</Footer>
         </DetailBox>
     );
 };
@@ -206,7 +214,6 @@ const ButtonContainer = styled.div`
     box-sizing: border-box;
     color: #333;
     text-align: left;
-
 `;
 
 const EachButton = styled.button`

@@ -4,8 +4,9 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useParams, useNavigate } from "react-router-dom";
 import { getDetail } from "../api/getDetail";
 import DetailCard from "../components/detail-page-component/DetailCard";
-import { Navbar } from "react-bootstrap";
+import { Navbar, Button } from "react-bootstrap";
 import { HiArrowLeft } from "react-icons/hi2";
+import { GrHome } from "react-icons/gr";
 
 function Detail() {
     const { id } = useParams();
@@ -14,19 +15,13 @@ function Detail() {
         getDetail(id)
     );
 
+
     const navigate = useNavigate();
     const navigateToBack = () => {
         navigate(-1);
     };
 
-    const detailData = data?.data;
-
-    console.log(detailData);
-
-    if (isLoading) {
-        // 로딩스피너로 바꿔야함
-        return <h1>로딩중입니다!</h1>;
-    }
+    const detailData = data?.data.data;
 
     if (isError) {
         // 큼..!
@@ -37,23 +32,37 @@ function Detail() {
         <>
             <Wrapper>
                 <Header>
-                    <Navbar expand='lg' sticky='top'>
+                    <Navbar
+                        expand='lg'
+                        sticky='top'
+                        style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                        }}
+                    >
                         <Navbar.Brand
                             onClick={navigateToBack}
                             style={{ cursor: "pointer" }}
                         >
-                            <HiArrowLeft size={24} />
+                            <HiArrowLeft size={34} />
+                        </Navbar.Brand>
+                        <Navbar.Brand>
+                            <StyledButton variant='outline-dark'>
+                                <GrHome /> MY플레이스홈
+                            </StyledButton>
                         </Navbar.Brand>
                     </Navbar>
                     <StContainer>
                         <StNameContainer>
-                            <h1>음식점이름</h1>
+                            {/* <h2>음식점이름</h2> */}
+                            <h2>{detailData?.restaurantName}</h2>
                             <div>❤️</div>
                         </StNameContainer>
-                        <StAddressContainer>주소</StAddressContainer>
+                        {/* <StAddressContainer>주소</StAddressContainer> */}
+                        <StAddressContainer>{detailData?.restaurantAddress}</StAddressContainer>
                     </StContainer>
                 </Header>
-                <DetailCard detailData={detailData} />
+                <DetailCard detailData={detailData} isLoading={isLoading} />
             </Wrapper>
         </>
     );
@@ -94,4 +103,18 @@ const StAddressContainer = styled.div`
     margin: 0 auto;
     box-sizing: border-box;
     display: flex;
+`;
+
+const StyledButton = styled(Button)`
+    &:hover {
+        background-color: transparent;
+        color: #212529;
+    }
+    &:active {
+    background-color: transparent;
+    color: #212529;
+    box-shadow: none;
+  }
+
+    /* border-color: #b5b5b5; */
 `;
