@@ -9,9 +9,12 @@ import UserProfile from "../UserProfile";
 
 const FeedCard = ({ item }) => {
   const navigate = useNavigate();
+  const goToDatailPage = () => {
+    navigate("/test", { state: { title: "title" } });
+  };
   return (
     <div>
-      <FeedBox>
+      <FeedBox onClick={goToDatailPage}>
         <OuterBox>
           <ProfileBox>
             <UserProfile />
