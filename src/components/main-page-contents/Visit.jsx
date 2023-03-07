@@ -28,6 +28,7 @@ const Visit = () => {
   if (isError) {
     console.log(error);
   }
+  console.log(data);
 
   const dataList = data?.data.data;
   return (
@@ -44,7 +45,6 @@ const Visit = () => {
 export default Visit;
 
 const VisitArea = styled.div`
-  background-color: gray;
   padding: 20px;
 `;
 

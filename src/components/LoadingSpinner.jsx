@@ -15,6 +15,9 @@ const LoadingSpinner = () => {
 };
 
 const LdsFacebook = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 48%;
   .lds-ellipsis {
     display: inline-block;
     position: relative;
