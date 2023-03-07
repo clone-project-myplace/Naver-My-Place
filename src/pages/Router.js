@@ -9,7 +9,6 @@ import UserProfileEdit from "./UserProfileEdit";
 const Router = () => {
   return (
     <BrowserRouter>
-      <Navbar />
       <Routes>
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />

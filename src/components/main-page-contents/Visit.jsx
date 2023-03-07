@@ -28,6 +28,7 @@ const Visit = () => {
   if (isError) {
     console.log(error);
   }
+  console.log(data);
 
   const dataList = data?.data.data;
   return (
