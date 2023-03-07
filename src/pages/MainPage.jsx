@@ -9,6 +9,7 @@ import { changeTab } from "../contexts/reducers/tabModeSlice";
 import defaultProfileImg from "../assets/default_profile.jpeg";
 import { navbarColorCode } from "../constants/colorCode";
 import UserProfile from "../components/UserProfile";
+import { FiMenu } from "react-icons/fi";
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -44,7 +45,10 @@ const MainPage = () => {
     <div>
       <TopLogoArea>
         <div>MY 플레이스</div>
-        <div>쿠폰 =</div>
+        <div>
+          쿠폰
+          <FiMenu />
+        </div>
       </TopLogoArea>
       <MyProfileArea>
         {token === null ? (
@@ -85,6 +89,7 @@ const MainPage = () => {
         </TabsArea>
       </TabsOuter>
       {contents()}
+      <UserProfile editable={true} />
     </div>
   );
 };
