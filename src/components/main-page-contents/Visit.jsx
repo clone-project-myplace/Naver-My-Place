@@ -44,7 +44,6 @@ const Visit = () => {
 export default Visit;
 
 const VisitArea = styled.div`
-  background-color: gray;
   padding: 20px;
 `;
 

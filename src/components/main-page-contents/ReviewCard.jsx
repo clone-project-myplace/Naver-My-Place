@@ -28,14 +28,16 @@ const Picture = styled.div`
 
 const Location = styled.div`
   color: white;
+  text-align: left;
   position: relative;
-  top: 140px;
-  right: 40px;
+  top: 70%;
+  left: 8%;
 `;
 
 const RestName = styled.div`
   color: white;
+  text-align: left;
   position: relative;
-  top: 145px;
-  right: 60px;
+  top: 70%;
+  left: 8%;
 `;

@@ -7,7 +7,13 @@ import { BsFillPencilFill } from "react-icons/bs";
 const VisitCard = ({ item }) => {
   const navigate = useNavigate();
   const goToWritePage = (id) => {
-    navigate(`/write/${id}`);
+    navigate(`/write/create`, {
+      state: {
+        visitedRestaurantName: item.visitedRestaurantName,
+        visitedDate: item.visitedDate,
+        visitedRestaurantName: item.visitedRestaurantName,
+      },
+    });
   };
   console.log(item);
   return (
@@ -20,7 +26,7 @@ const VisitCard = ({ item }) => {
       {item.isReviewed ? (
         ""
       ) : (
-        <ReviewPostButton>
+        <ReviewPostButton onClick={goToWritePage}>
           <BsFillPencilFill color={naverColorCode} /> 리뷰 쓰기
         </ReviewPostButton>
       )}

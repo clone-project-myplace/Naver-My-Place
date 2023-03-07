@@ -4,6 +4,9 @@ import { naverColorCode } from "../constants/colorCode";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Container } from "react-bootstrap";
+import { CiUser, CiLock } from "react-icons/ci";
+import LoginSignupButtonStyle from "../styles/LoginSignupButtonStyle";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -26,18 +29,20 @@ const Login = () => {
       .catch((err) => console.log(err));
   };
   return (
-    <div>
+    <Container>
       <form onSubmit={handleSubmit((data) => postLogin(data))}>
         <LogoStyle>NAVER</LogoStyle>
-        <div>
-          <input
+        <IdInput>
+          <CiUser />
+          <InputStyle
             type="text"
             placeholder="아이디"
             {...register("memberId", { required: "아이디를 입력해주세요" })}
           />
-        </div>
+        </IdInput>
         <div>
-          <input
+          <CiLock />
+          <InputStyle
             type="password"
             placeholder="비밀번호"
             {...register("memberPw", {
@@ -46,10 +51,11 @@ const Login = () => {
           />
         </div>
         <div>
-          <input type="submit" />
+          <LoginSignupButtonStyle>로그인</LoginSignupButtonStyle>
+          <InputStyle type="submit" />
         </div>
       </form>
-    </div>
+    </Container>
   );
 };
 
@@ -59,4 +65,22 @@ const LogoStyle = styled.div`
   color: ${naverColorCode};
   font-size: 30px;
   font-weight: 900;
+`;
+
+const IdInput = styled.div`
+  border: 1px solid gray;
+  width: 70vw;
+  padding: 10px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+`;
+
+const InputStyle = styled.input`
+  border: none;
+  width: 95%;
+  margin-left: 10px;
+
+  :focus {
+    outline: none;
+  }
 `;
