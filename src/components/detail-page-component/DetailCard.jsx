@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -9,9 +9,13 @@ import UserProfile from "../UserProfile";
 import { useMutation } from "react-query";
 import { deleteReview } from "../../api/getDetail";
 import { getDate } from "../../utils/getDate";
+import axios from "axios";
 
 const DetailCard = ({ detailData }) => {
-    console.log(detailData);
+    // console.log(detailData);
+
+    const accessToken = window.localStorage.getItem("accessToken");
+
     const [showButtons, setShowButtons] = useState(false);
     const [confirmDelete, setConfirmDelete] = useState(false);
     const navigate = useNavigate();
@@ -21,11 +25,7 @@ const DetailCard = ({ detailData }) => {
     const queryClient = useQueryClient();
 
     const { mutate: deleteReviewMutate } = useMutation(
-        () =>
-            deleteReview(
-                detailData.reviewId,
-                localStorage.getItem("accessToken")
-            ),
+        () => deleteReview(detailData.reviewId, accessToken),
         {
             onSuccess: () => {
                 queryClient.invalidateQueries("getReview");
@@ -35,12 +35,39 @@ const DetailCard = ({ detailData }) => {
     );
 
     const navToEditButton = () => {
-        console.log("버튼 동작?");
-        console.log(detailData);
         navigate("/write/edit", {
             state: { detailData },
         });
     };
+
+    const curMemberName = null;
+
+    //토큰 디코딩 -> memberName 가져오기
+    //if문 accessToken 이 undefined 아닐때만!
+    if (accessToken == !undefined) {
+        const parseJwt = (accessToken) => {
+            const base64Url = accessToken.split(".")[1];
+            const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+            const jsonPayload = decodeURIComponent(
+                window
+                    .atob(base64)
+                    .split("")
+                    .map(function (c) {
+                        return (
+                            "%" +
+                            ("00" + c.charCodeAt(0).toString(16)).slice(-2)
+                        );
+                    })
+                    .join("")
+            );
+
+            return JSON.parse(jsonPayload);
+        };
+
+        const curMemberName = parseJwt(accessToken).sub;
+    }
+
+    console.log(curMemberName);
 
     const handleEllipsisButtonModal = () => {
         setShowButtons(!showButtons);
@@ -61,6 +88,7 @@ const DetailCard = ({ detailData }) => {
 
     const handleDelete = () => {
         deleteReviewMutate();
+        // deleteReview2();
         navigate("/");
     };
 
@@ -70,12 +98,14 @@ const DetailCard = ({ detailData }) => {
                 <ProfileBox>
                     <UserProfile />
                 </ProfileBox>
-                <BsThreeDotsVerticalStyle>
-                    <BsThreeDotsVertical
-                        style={{ cursor: "pointer" }}
-                        onClick={handleEllipsisButtonModal}
-                    />
-                </BsThreeDotsVerticalStyle>
+                {detailData?.memberName == curMemberName && (
+                    <BsThreeDotsVerticalStyle>
+                        <BsThreeDotsVertical
+                            style={{ cursor: "pointer" }}
+                            onClick={handleEllipsisButtonModal}
+                        />
+                    </BsThreeDotsVerticalStyle>
+                )}
             </OuterBox>
             <div style={{ position: "relative" }}>
                 <ButtonBox>
@@ -169,8 +199,10 @@ const StCardContentPicture = styled.img`
     min-height: 280px;
 
     object-fit: cover;
-    max-height: 430px;
+    max-height: 400px;
     width: auto;
+
+    max-width: 650px;
 
     display: block;
 
