@@ -46,8 +46,7 @@ const MainPage = () => {
       <TopLogoArea>
         <div>MY 플레이스</div>
         <div>
-          쿠폰
-          <FiMenu />
+          {" 쿠폰 "} <FiMenu size="30px" />
         </div>
       </TopLogoArea>
       <MyProfileArea>
@@ -69,7 +68,14 @@ const MainPage = () => {
             </LoginButton>
           </div>
         ) : (
-          <div>로그인됨</div>
+          <div
+            style={{
+              display: "flex",
+              marginBottom: "20px",
+            }}
+          >
+            <UserProfile editable={true} />
+          </div>
         )}
         <div>
           <ReviewWriteButton>리뷰 쓰기</ReviewWriteButton>
@@ -89,7 +95,6 @@ const MainPage = () => {
         </TabsArea>
       </TabsOuter>
       {contents()}
-      <UserProfile editable={true} />
     </div>
   );
 };

@@ -7,10 +7,15 @@ import LoadingSpinner from "../LoadingSpinner";
 import ReviewCard from "./ReviewCard";
 
 const Review = () => {
+  const accessToken = window.localStorage.getItem("accessToken");
+  const config = { Authorization: `JWT ${accessToken}` };
   const { isLoading, isError, error, data } = useQuery(
-    ["get-feed-data"],
+    ["get-review-data"],
     () => {
-      axios.get(`${process.env.REACT_APP_BASEURL}/api/myreviews`);
+      return axios
+        .get(`${process.env.REACT_APP_BASEURL}/api/myreviews`, config)
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
     }
   );
   if (isLoading) {

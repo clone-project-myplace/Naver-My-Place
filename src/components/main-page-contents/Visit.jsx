@@ -7,19 +7,21 @@ import { Container } from "react-bootstrap";
 import { useState } from "react";
 
 const Visit = () => {
+  const [visitList, setVisitList] = useState([]);
   const accessToken = window.localStorage.getItem("accessToken");
+  console.log(accessToken);
   const config = {
     headers: {
       Authorization: accessToken,
     },
   };
   const { isLoading, isError, error, data } = useQuery(
-    ["get-feed-data"],
+    ["get-visit-data"],
     () => {
-      return axios.get(
-        `${process.env.REACT_APP_BASEURL}/api/reviews/visits`,
-        config
-      );
+      return axios
+        .get(`${process.env.REACT_APP_BASEURL}/api/reviews/visits`, config)
+        .then((res) => console.log("res : ", res))
+        .catch((err) => console.log(err));
     }
   );
   if (isLoading) {
@@ -28,13 +30,11 @@ const Visit = () => {
   if (isError) {
     console.log(error);
   }
-  console.log(data);
 
-  const dataList = data?.data.data;
   return (
     <Container>
       <VisitArea>
-        {dataList.map((item) => {
+        {visitList.map((item) => {
           return <VisitCard item={item} />;
         })}
       </VisitArea>

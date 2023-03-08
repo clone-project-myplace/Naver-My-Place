@@ -18,7 +18,7 @@ const Signup = () => {
         console.log(res);
         navigate("/login");
       })
-      .catch((err) => console.log("err : ", err));
+      .catch((err) => alert(err.response.data.error.msg));
   };
 
   return (
@@ -29,7 +29,6 @@ const Signup = () => {
           <input
             type="text"
             placeholder="아이디"
-
             {...register("memberId", { required: "아이디를 입력해주세요" })}
           />
         </div>

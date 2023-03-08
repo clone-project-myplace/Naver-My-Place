@@ -10,6 +10,8 @@ const Navbar = () => {
   const token = window.localStorage.getItem("token"); //토큰 저장
   return (
     <NavbarArea>
+      <UserProfile editable={true} />
+
       <div>
         <img style={ProfileImg} src={defaultProfileImg} alt="profile image" />
         <button>로그인하기</button>

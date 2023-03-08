@@ -12,7 +12,7 @@ const FeedCard = ({ item }) => {
   const goToDatailPage = () => {
     navigate("/test", { state: { title: "title" } });
   };
-  console.log(item);
+
   return (
     <div>
       <FeedBox onClick={goToDatailPage}>
@@ -24,12 +24,13 @@ const FeedCard = ({ item }) => {
             <BsThreeDotsVertical />
           </BsThreeDotsVerticalStyle>
         </OuterBox>
-        <ImgBox>
+        <ImgBox url={item.reviewImgUrl}>
           <LocationBox>
-            <BiMap />${item.restaurantAddress}
+            <BiMap />
+            {item.restaurantAddress}
           </LocationBox>
         </ImgBox>
-        <Desc>${item.reviewContents}</Desc>
+        <Desc>{item.reviewContents}</Desc>
         <Tag>
           <TagButton>음식이 맛있어요</TagButton>
           <TagButton>+1</TagButton>
@@ -70,6 +71,7 @@ const OuterBox = styled.div`
 `;
 
 const ImgBox = styled.div`
+  background-color: #d8ffc2;
   margin: 10px auto 10px auto;
   width: 680px;
   height: 300px;

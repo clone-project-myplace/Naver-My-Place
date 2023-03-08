@@ -112,7 +112,6 @@ const ProfileImg = {
 
 const ProfileArea = styled.div`
   display: flex;
-  align-items: center;
 `;
 
 const Nickname = styled.div`
