@@ -7,7 +7,6 @@ import { Container } from "react-bootstrap";
 import { useState } from "react";
 
 const Visit = () => {
-  const [visitList, setVisitList] = useState([]);
   const accessToken = window.localStorage.getItem("accessToken");
   console.log(accessToken);
   const config = {
@@ -18,10 +17,10 @@ const Visit = () => {
   const { isLoading, isError, error, data } = useQuery(
     ["get-visit-data"],
     () => {
-      return axios
-        .get(`${process.env.REACT_APP_BASEURL}/api/reviews/visits`, config)
-        .then((res) => console.log("res : ", res))
-        .catch((err) => console.log(err));
+      return axios.get(
+        `${process.env.REACT_APP_BASEURL}/api/reviews/visits`,
+        config
+      );
     }
   );
   if (isLoading) {
@@ -31,11 +30,13 @@ const Visit = () => {
     console.log(error);
   }
 
+  const visitList = data.data.data;
+
   return (
     <Container>
       <VisitArea>
-        {visitList.map((item) => {
-          return <VisitCard item={item} />;
+        {visitList?.map((item, i) => {
+          return <VisitCard key={i} item={item} />;
         })}
       </VisitArea>
     </Container>

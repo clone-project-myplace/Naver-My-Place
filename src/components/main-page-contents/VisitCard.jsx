@@ -11,11 +11,9 @@ const VisitCard = ({ item }) => {
       state: {
         visitedRestaurantName: item.visitedRestaurantName,
         visitedDate: item.visitedDate,
-        visitedRestaurantName: item.visitedRestaurantName,
       },
     });
   };
-  console.log(item);
   return (
     <VisitCardStyle>
       <VisitTitleTopArea>
@@ -23,6 +21,7 @@ const VisitCard = ({ item }) => {
         <VisitDesc>{item.visitedDate}</VisitDesc>
       </VisitTitleTopArea>
       <Reservation>{item.visitedRestaurantName} 예약</Reservation>
+
       {item.isReviewed ? (
         ""
       ) : (

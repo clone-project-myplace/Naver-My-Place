@@ -40,7 +40,7 @@ const Login = () => {
             {...register("memberId", { required: "아이디를 입력해주세요" })}
           />
         </IdInput>
-        <div>
+        <PasswordInput>
           <CiLock />
           <InputStyle
             type="password"
@@ -49,10 +49,9 @@ const Login = () => {
               required: "비밀번호를 입력해주세요",
             })}
           />
-        </div>
+        </PasswordInput>
         <div>
-          <LoginSignupButtonStyle>로그인</LoginSignupButtonStyle>
-          <InputStyle type="submit" />
+          <LoginSignupButtonStyle type="submit">로그인</LoginSignupButtonStyle>
         </div>
       </form>
     </Container>
@@ -73,6 +72,16 @@ const IdInput = styled.div`
   padding: 10px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+`;
+
+const PasswordInput = styled.div`
+  border-bottom: 1px solid gray;
+  border-left: 1px solid gray;
+  border-right: 1px solid gray;
+  width: 70vw;
+  padding: 10px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 `;
 
 const InputStyle = styled.input`

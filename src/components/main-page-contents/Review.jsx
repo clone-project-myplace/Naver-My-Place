@@ -25,6 +25,7 @@ const Review = () => {
     console.log(error);
   }
 
+  console.log(data);
   return (
     <Container>
       <Row className="justify-content-md-center">
