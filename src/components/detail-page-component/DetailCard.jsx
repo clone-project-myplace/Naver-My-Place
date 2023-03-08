@@ -7,13 +7,12 @@ import { useQueryClient } from "react-query";
 import DeleteModal from "./DeleteModal";
 import UserProfile from "../UserProfile";
 import { useMutation } from "react-query";
-import { deleteReview } from "../../api/getDetail";
+import { deleteReview, likeReview } from "../../api/getDetail";
 import { getDate } from "../../utils/getDate";
-import axios from "axios";
+import { AiOutlineHeart } from "react-icons/ai";
+import { Button } from "react-bootstrap";
 
 const DetailCard = ({ detailData }) => {
-    // console.log(detailData);
-
     const accessToken = window.localStorage.getItem("accessToken");
 
     const [showButtons, setShowButtons] = useState(false);
@@ -29,43 +28,55 @@ const DetailCard = ({ detailData }) => {
         {
             onSuccess: () => {
                 queryClient.invalidateQueries("getReview");
-                console.log("Item deleted");
+                // console.log("Item deleted");
+                alert("삭제 완료!");
             },
         }
     );
 
+    //likes
+    const { mutate: likeReviewMutate, data: likeReviewData } = useMutation(
+        () => likeReview(detailData.reviewId, accessToken),
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries("getReview");
+            },
+        }
+    );
     const navToEditButton = () => {
-        navigate("/write/edit", {
+        navigate("/write", {
             state: { detailData },
         });
     };
 
-    const curMemberName = null;
+    // useEffect(() => {
+    //     if (likeReviewData) {
+    //         const { msg } = likeReviewData.data;
+    //         alert(msg);
+    //     }
+    // }, [likeReviewData]);
 
     //토큰 디코딩 -> memberName 가져오기
     //if문 accessToken 이 undefined 아닐때만!
-    if (accessToken == !undefined) {
-        const parseJwt = (accessToken) => {
-            const base64Url = accessToken.split(".")[1];
-            const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-            const jsonPayload = decodeURIComponent(
-                window
-                    .atob(base64)
-                    .split("")
-                    .map(function (c) {
-                        return (
-                            "%" +
-                            ("00" + c.charCodeAt(0).toString(16)).slice(-2)
-                        );
-                    })
-                    .join("")
-            );
+    const parseJwt = (accessToken) => {
+        const base64Url = accessToken.split(".")[1];
+        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+        const jsonPayload = decodeURIComponent(
+            window
+                .atob(base64)
+                .split("")
+                .map(function (c) {
+                    return (
+                        "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2)
+                    );
+                })
+                .join("")
+        );
 
-            return JSON.parse(jsonPayload);
-        };
+        return JSON.parse(jsonPayload);
+    };
 
-        const curMemberName = parseJwt(accessToken).sub;
-    }
+    const curMemberName = parseJwt(accessToken).sub;
 
     console.log(curMemberName);
 
@@ -88,8 +99,12 @@ const DetailCard = ({ detailData }) => {
 
     const handleDelete = () => {
         deleteReviewMutate();
-        // deleteReview2();
-        navigate("/");
+        navigate(-1);
+    };
+
+    const handleOnClickLikeBtn = (e) => {
+        e.stopPropagation();
+        likeReviewMutate();
     };
 
     return (
@@ -97,7 +112,12 @@ const DetailCard = ({ detailData }) => {
             <OuterBox>
                 <ProfileBox>
                     <UserProfile />
+                    
                 </ProfileBox>
+                <Button color='error' onClick={handleOnClickLikeBtn}>
+                    <AiOutlineHeart />
+                    {detailData?.likeCount}
+                </Button>
                 {detailData?.memberName == curMemberName && (
                     <BsThreeDotsVerticalStyle>
                         <BsThreeDotsVertical
@@ -107,6 +127,7 @@ const DetailCard = ({ detailData }) => {
                     </BsThreeDotsVerticalStyle>
                 )}
             </OuterBox>
+
             <div style={{ position: "relative" }}>
                 <ButtonBox>
                     {showButtons && (
