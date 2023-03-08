@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -6,8 +6,15 @@ import { useState } from "react";
 import { useQueryClient } from "react-query";
 import DeleteModal from "./DeleteModal";
 import UserProfile from "../UserProfile";
+import { useMutation } from "react-query";
+import { deleteReview, likeReview } from "../../api/getDetail";
+import { getDate } from "../../utils/getDate";
+import { AiOutlineHeart } from "react-icons/ai";
+import { Button } from "react-bootstrap";
 
 const DetailCard = ({ detailData }) => {
+    const accessToken = window.localStorage.getItem("accessToken");
+
     const [showButtons, setShowButtons] = useState(false);
     const [confirmDelete, setConfirmDelete] = useState(false);
     const navigate = useNavigate();
@@ -16,19 +23,62 @@ const DetailCard = ({ detailData }) => {
 
     const queryClient = useQueryClient();
 
-    // const { mutate: deleteReviewMutate } = useMutation(
-    //     () =>
-    //         deleteReview(
-    //             detailData.reviewId,
-    //             localStorage.getItem("accessToken")
-    //         ),
-    //     {
-    //         onSuccess: () => {
-    //             queryClient.invalidateQueries("getReview");
-    //             console.log("Item deleted");
-    //         },
+    const { mutate: deleteReviewMutate } = useMutation(
+        () => deleteReview(detailData.reviewId, accessToken),
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries("getReview");
+                // console.log("Item deleted");
+                alert("삭제 완료!");
+            },
+        }
+    );
+
+    //likes
+    const { mutate: likeReviewMutate, data: likeReviewData } = useMutation(
+        () => likeReview(detailData.reviewId, accessToken),
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries("getReview");
+            },
+        }
+    );
+    const navToEditButton = () => {
+        navigate("/write", {
+            state: { detailData },
+        });
+    };
+
+    // useEffect(() => {
+    //     if (likeReviewData) {
+    //         const { msg } = likeReviewData.data;
+    //         alert(msg);
     //     }
-    // );
+    // }, [likeReviewData]);
+
+    //토큰 디코딩 -> memberName 가져오기
+    //if문 accessToken 이 undefined 아닐때만!
+    const parseJwt = (accessToken) => {
+        const base64Url = accessToken.split(".")[1];
+        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+        const jsonPayload = decodeURIComponent(
+            window
+                .atob(base64)
+                .split("")
+                .map(function (c) {
+                    return (
+                        "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2)
+                    );
+                })
+                .join("")
+        );
+
+        return JSON.parse(jsonPayload);
+    };
+
+    const curMemberName = parseJwt(accessToken).sub;
+
+    console.log(curMemberName);
 
     const handleEllipsisButtonModal = () => {
         setShowButtons(!showButtons);
@@ -48,8 +98,13 @@ const DetailCard = ({ detailData }) => {
     };
 
     const handleDelete = () => {
-        // deleteReviewMutate();
-        navigate("/");
+        deleteReviewMutate();
+        navigate(-1);
+    };
+
+    const handleOnClickLikeBtn = (e) => {
+        e.stopPropagation();
+        likeReviewMutate();
     };
 
     return (
@@ -57,22 +112,28 @@ const DetailCard = ({ detailData }) => {
             <OuterBox>
                 <ProfileBox>
                     <UserProfile />
+                    
                 </ProfileBox>
-                <BsThreeDotsVerticalStyle>
-                    <BsThreeDotsVertical
-                        style={{ cursor: "pointer" }}
-                        onClick={handleEllipsisButtonModal}
-                    />
-                </BsThreeDotsVerticalStyle>
+                <Button color='error' onClick={handleOnClickLikeBtn}>
+                    <AiOutlineHeart />
+                    {detailData?.likeCount}
+                </Button>
+                {detailData?.memberName == curMemberName && (
+                    <BsThreeDotsVerticalStyle>
+                        <BsThreeDotsVertical
+                            style={{ cursor: "pointer" }}
+                            onClick={handleEllipsisButtonModal}
+                        />
+                    </BsThreeDotsVerticalStyle>
+                )}
             </OuterBox>
-            <div style={{position:"relative"}}>
+
+            <div style={{ position: "relative" }}>
                 <ButtonBox>
                     {showButtons && (
                         <>
                             <ButtonContainer>
-                                <EachButton
-                                    onClick={() => alert("여기서 수정화면으로")}
-                                >
+                                <EachButton onClick={navToEditButton}>
                                     수정하기
                                 </EachButton>
                             </ButtonContainer>
@@ -96,20 +157,18 @@ const DetailCard = ({ detailData }) => {
             </div>
 
             <ImgBox>
-                <StCardContentPicture
-                    // src={detailData.imgUrl}
-                    src='https://pup-review-phinf.pstatic.net/MjAyMzAzMDZfMTQ3/MDAxNjc4MDgwMDU3MDUw.S-7WQ-8rC6FcvN5_KtEAdqubxs_nXzZ7uhv94RkDSZkg.8xoZ5_5SdhqRb_zeg8ysvT3F1A8bi7zGppO6TD-n3Sog.JPEG/2C860D91-1E4B-492E-B71C-D1C1EDBA67EF.jpeg?type=w828_60_sharpen'
-                />
+                <StCardContentPicture src={detailData?.reviewImgUrl} />
             </ImgBox>
-            <Desc>
-                신촌 새로 생긴 맛집인데 가볍게 술먹기 넘 좋아요! 안주도 다
-                맛있어요!
-            </Desc>
+            <Desc>{detailData?.reviewContents}</Desc>
             <Tag>
-                <TagButton>음식이 맛있어요</TagButton>
-                <TagButton>기분이 좋아요</TagButton>
+                {detailData?.keywordList.map((item, index) => {
+                    return <TagButton key={index}> {item} </TagButton>;
+                })}
+                {/*map으로 데이터 꺼내주기 */}
+                {/* <TagButton>음식이 맛있어요</TagButton>
+                <TagButton>기분이 좋아요</TagButton> */}
             </Tag>
-            <Footer>2023-03-03</Footer>
+            <Footer>{getDate(detailData?.createdDate)}</Footer>
         </DetailBox>
     );
 };
@@ -161,8 +220,10 @@ const StCardContentPicture = styled.img`
     min-height: 280px;
 
     object-fit: cover;
-    max-height: 430px;
+    max-height: 400px;
     width: auto;
+
+    max-width: 650px;
 
     display: block;
 
@@ -206,7 +267,6 @@ const ButtonContainer = styled.div`
     box-sizing: border-box;
     color: #333;
     text-align: left;
-
 `;
 
 const EachButton = styled.button`

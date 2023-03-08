@@ -5,7 +5,7 @@ import MainPage from "./MainPage";
 import Signup from "./Signup";
 import Detail from "../pages/Detail";
 import UserProfileEdit from "./UserProfileEdit";
-import Test from "./Test";
+import Write from "./Write";
 
 const Router = () => {
   return (
@@ -16,7 +16,7 @@ const Router = () => {
         <Route path="/" element={<MainPage />} />
         <Route path="/detail/:id" element={<Detail />} />
         <Route path="/myprofile" element={<UserProfileEdit />} />
-        <Route path="/test" element={<Test />} />
+        <Route path="/write" element={<Write />} />
       </Routes>
     </BrowserRouter>
   );
