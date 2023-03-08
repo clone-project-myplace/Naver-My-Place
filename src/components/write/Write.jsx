@@ -3,6 +3,8 @@ import { useMutation, useQueryClient } from "react-query";
 import { addReview, uploadPost, uploadPost2 } from "../../axios/api";
 import styled from "styled-components";
 import axios from "axios";
+import { faCameraAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import {
   WriteHeader,
@@ -15,17 +17,32 @@ import {
   EmojiPrice,
   EmojiChoiceBox,
   Textarea,
+  ReviewContainer,
+  ReviewTitle,
+  ReviewLable,
+  ReviewBtnTitle,
+  ReviewBtnSubTitle,
 } from "./style";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 function Write() {
+  const navigate = useNavigate();
+  const { mode } = useParams();
+  const location = useLocation();
+
+  if (mode === "edit") {
+    console.log("location.state", location.state);
+    console.log("location.state.", location.state.detailData.reviewContents);
+    console.log("params", mode);
+  }
+
   //이중 for
-
+  // const [files, setFiles] = useState("");
   const [Arr, setArr] = useState([]);
-  const [files, setFiles] = useState("");
-
   const [click, setClick] = useState("true");
   const [clickBtn, setClickBtn] = useState("white");
+
+  console.log(Arr);
 
   const [click2, setClick2] = useState("true");
   const [clickBtn2, setClickBtn2] = useState("white");
@@ -299,10 +316,6 @@ function Write() {
   });
 
   const fileInput = useRef(null);
-  const onImgButton = (event) => {
-    event.preventDefault();
-    fileInput.current.click();
-  };
 
   const [reviewContent, setReviewContent] = useState("");
   const [newimage, setNewImage] = useState("");
@@ -331,6 +344,7 @@ function Write() {
     }
   };
 
+  console.log("files", file);
   const onSubmitPostHandler = async (event) => {
     event.preventDefault();
 
@@ -339,9 +353,9 @@ function Write() {
     formData.append("reviewKeywordList", Arr);
     formData.append("reviewPhotoUrl", file);
     formData.append("reviewContents", reviewContent);
-    console.log("Arr", Arr);
-    console.log("file", file);
-    console.log("reviewContent", reviewContent);
+    // console.log("Arr", Arr);
+    // console.log("file", file);
+    // console.log("reviewContent", reviewContent);
 
     // console.log(
     //   "formData.get(reviewKeywordList)",
@@ -353,7 +367,6 @@ function Write() {
     mutation.mutate(formData);
     // alert("업로드 완료!");
   };
-  console.log(Arr);
 
   return (
     <MainContainer>
@@ -656,25 +669,40 @@ function Write() {
         </EmojiChoiceContainer>
       </EmojiContainer>
       <form onSubmit={onSubmitPostHandler} encType="multipart/form-data">
-        <input
-          id="imgae"
-          type="file"
-          accept="img/*"
-          onChange={onImgPostHandler}
-          ref={fileInput}
-        />
-
-        <ImgBox src={newimage} alt="img" />
-        <div>
-          <div>리뷰를 남겨주세요</div>
-        </div>
-
-        <div>
-          <Textarea
-            placeholder="내용을 적어주세요"
-            onChange={onReviewContentHandler}
-            value={reviewContent}
+        <ReviewContainer>
+          <ReviewTitle>리뷰를 남겨주세요</ReviewTitle>
+          <ReviewLable htmlFor="input-file">
+            <FontAwesomeIcon icon={faCameraAlt} />
+            <ReviewBtnTitle>사진추가</ReviewBtnTitle>
+            <ReviewBtnSubTitle>최대 20장</ReviewBtnSubTitle>
+          </ReviewLable>
+          <input
+            id="input-file"
+            type="file"
+            accept="img/*"
+            onChange={onImgPostHandler}
+            ref={fileInput}
+            style={{ display: "none" }}
           />
+        </ReviewContainer>
+        {file.length !== 0 ? <ImgBox src={newimage} alt="img" /> : <div></div>}
+        {/* 
+        <ImgBox src={newimage} alt="img" /> */}
+
+        <div>
+          {mode === "edit" ? (
+            <Textarea
+              placeholder="내용을 적어주세요"
+              onChange={onReviewContentHandler}
+              value={location.state.detailData.reviewContents}
+            />
+          ) : (
+            <Textarea
+              placeholder="내용을 적어주세요"
+              onChange={onReviewContentHandler}
+              value={reviewContent}
+            />
+          )}
         </div>
         <button>등록하기</button>
       </form>
@@ -685,10 +713,12 @@ function Write() {
 export default Write;
 
 const ImgBox = styled.img`
-  min-width: 300px;
-  min-height: 300px;
-  max-width: 500px;
-  max-height: 500px;
+  min-width: 200px;
+  min-height: 200px;
+  max-width: 200px;
+  max-height: 200px;
   background-color: #ebebeb;
   align-items: center;
+  margin-bottom: 50px;
+  object-fit: cover;
 `;

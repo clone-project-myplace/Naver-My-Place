@@ -14,7 +14,6 @@ const VisitCard = ({ item }) => {
       },
     });
   };
-  console.log(item.visitedRestaurantId);
   return (
     <VisitCardStyle>
       <VisitTitleTopArea>

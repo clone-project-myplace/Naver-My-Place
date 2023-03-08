@@ -80,7 +80,7 @@ const UserProfile = ({ editable }) => {
                 <div>소개</div>
                 <textarea
                   type="text"
-                  placeholder="예. 분당구  빵집 & 케이크 맛집 탐험가"
+                  placeholder="예. 분당구 빵집 & 케이크 맛집 탐험가"
                 />
               </NicknameArea>
             </form>
