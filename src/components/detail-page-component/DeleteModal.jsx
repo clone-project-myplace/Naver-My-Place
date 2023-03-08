@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
+
 const DeleteModal = ({
     isOpen,
     onClose,
@@ -25,8 +26,8 @@ const DeleteModal = ({
                     <p>{message}</p>
                 </StText>
                 <StButtonBox>
-                    <StButton onClick={onClose}>취소</StButton>
-                    <StButton onClick={handleConfirmClick}>삭제</StButton>
+                    <StButton boderRight="1px solid" onClick={onClose}>취소</StButton>
+                    <StButton color="#00b49b" onClick={handleConfirmClick}>삭제</StButton>
                 </StButtonBox>
             </StyledModalContent>
         </StyledModalOverlay>
@@ -51,7 +52,7 @@ const StyledModalContent = styled.div`
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: white;
-    padding: 20px;
+    padding: 10px;
     border-radius: 10px;
     box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.25);
     z-index: 1000;
@@ -65,17 +66,22 @@ const StButtonBox = styled.div`
     display: flex;
     border-top: 1px solid;
     border-top-color: #ecf0f2;
+    text-align: center;
 `;
 
 const StButton = styled.div`
+    margin-top: 10px;
     cursor: pointer;
     flex: 1;
     line-height: 2.0rem;
-    color: #242424;
+    color: ${(props) => props.color};
+    border-right: ${(props) => props.boderRight};
+    border-right-color: #ecf0f2;
 
     text-align: center;
     align-items: center;
     justify-content: center;
+
 
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
 `;

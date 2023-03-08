@@ -9,6 +9,7 @@ import { changeTab } from "../contexts/reducers/tabModeSlice";
 import defaultProfileImg from "../assets/default_profile.jpeg";
 import { navbarColorCode } from "../constants/colorCode";
 import UserProfile from "../components/UserProfile";
+import { FiMenu } from "react-icons/fi";
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -44,7 +45,9 @@ const MainPage = () => {
     <div>
       <TopLogoArea>
         <div>MY 플레이스</div>
-        <div>쿠폰 =</div>
+        <div>
+          {" 쿠폰 "} <FiMenu size="30px" />
+        </div>
       </TopLogoArea>
       <MyProfileArea>
         {token === null ? (
@@ -65,7 +68,14 @@ const MainPage = () => {
             </LoginButton>
           </div>
         ) : (
-          <div>로그인됨</div>
+          <div
+            style={{
+              display: "flex",
+              marginBottom: "20px",
+            }}
+          >
+            <UserProfile editable={true} />
+          </div>
         )}
         <div>
           <ReviewWriteButton>리뷰 쓰기</ReviewWriteButton>

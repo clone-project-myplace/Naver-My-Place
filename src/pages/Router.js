@@ -5,17 +5,18 @@ import MainPage from "./MainPage";
 import Signup from "./Signup";
 import Detail from "../pages/Detail";
 import UserProfileEdit from "./UserProfileEdit";
+import Write from "./Write";
 
 const Router = () => {
   return (
     <BrowserRouter>
-      <Navbar />
       <Routes>
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<MainPage />} />
         <Route path="/detail/:id" element={<Detail />} />
         <Route path="/myprofile" element={<UserProfileEdit />} />
+        <Route path="/write" element={<Write />} />
       </Routes>
     </BrowserRouter>
   );
