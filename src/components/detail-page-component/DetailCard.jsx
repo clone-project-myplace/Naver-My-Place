@@ -49,18 +49,17 @@ const DetailCard = ({ detailData }) => {
         });
     };
 
-    // useEffect(() => {
-    //     if (likeReviewData) {
-    //         const { msg } = likeReviewData.data;
-    //         alert(msg);
-    //     }
-    // }, [likeReviewData]);
+
+
+    useEffect(() => {
+        if(!detailData?.isPushed){
+            setIsfilled(false);
+        }else{
+            setIsfilled(true);
+        }
+    },[detailData]);
 
     console.log(detailData?.isPushed);
-
-    if(detailData?.isPushed){
-        setIsfilled(true);
-    }
 
     //토큰 디코딩 -> memberName 가져오기
     const parseJwt = (accessToken) => {
@@ -139,7 +138,7 @@ const DetailCard = ({ detailData }) => {
                 </ProfileBox>
                 <div style={{ display: "flex" }}>
                     <LikesButton onClick={handleOnClickLikeBtn}>
-                        {isfilled ? (
+                        {detailData?.isPushed || isfilled ? (
                             <AiFillHeart size={30} color='red' />
                         ) : (
                             <AiOutlineHeart size={30} />

@@ -1,20 +1,33 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useParams, useNavigate } from "react-router-dom";
-import { getDetail } from "../api/getDetail";
 import DetailCard from "../components/detail-page-component/DetailCard";
 import { Navbar, Button } from "react-bootstrap";
 import { HiArrowLeft } from "react-icons/hi2";
 import { GrHome } from "react-icons/gr";
+import axios from "axios";
 
 function Detail() {
+    const config = (accessToken) => {
+        return { Authorization: `${accessToken}` };
+    };
+
+    const accessToken = window.localStorage.getItem("accessToken");
     const { id } = useParams();
 
     const { isLoading, isError, data } = useQuery(["getReview"], () =>
         getDetail(id)
     );
 
+    const getDetail = async (id) => {
+        return await axios.get(
+            `${process.env.REACT_APP_BASEURL}/api/reviews/${id}`,
+            {
+                headers: config(accessToken),
+            }
+        );
+    };
 
     const navigate = useNavigate();
     const navigateToBack = () => {
@@ -51,7 +64,10 @@ function Detail() {
                             <HiArrowLeft size={34} />
                         </Navbar.Brand>
                         <Navbar.Brand>
-                            <StyledButton variant='outline-dark' onClick={navToHome}>
+                            <StyledButton
+                                variant='outline-dark'
+                                onClick={navToHome}
+                            >
                                 <GrHome /> MY플레이스홈
                             </StyledButton>
                         </Navbar.Brand>
@@ -63,7 +79,9 @@ function Detail() {
                             {/* <div>❤️</div> */}
                         </StNameContainer>
                         {/* <StAddressContainer>주소</StAddressContainer> */}
-                        <StAddressContainer>{detailData?.restaurantAddress}</StAddressContainer>
+                        <StAddressContainer>
+                            {detailData?.restaurantAddress}
+                        </StAddressContainer>
                     </StContainer>
                 </Header>
                 <DetailCard detailData={detailData} isLoading={isLoading} />
@@ -115,10 +133,10 @@ const StyledButton = styled(Button)`
         color: #212529;
     }
     &:active {
-    background-color: transparent;
-    color: #212529;
-    box-shadow: none;
-  }
+        background-color: transparent;
+        color: #212529;
+        box-shadow: none;
+    }
 
     /* border-color: #b5b5b5; */
 `;
