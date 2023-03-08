@@ -1,27 +1,27 @@
-import axios from "axios";
-import React from "react";
-import { useQuery } from "react-query";
-import LoadingSpinner from "./LoadingSpinner";
+// import axios from "axios";
+// import React from "react";
+// import { useQuery } from "react-query";
+// import LoadingSpinner from "./LoadingSpinner";
 
-const Likes = () => {
-  const token = window.localStorage.getItem("token");
-  const { isLoading, isError, error, data } = useQuery(
-    ["getLikesCount"],
-    () => {
-      axios.get("api");
-    }
-  );
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
-  if (isError) {
-    console.log(error);
-  }
+// const Likes = () => {
+//   const accessToken = window.localStorage.getItem("accessToken");
+//   const { isLoading, isError, error, data } = useQuery(
+//     ["getLikesCount"],
+//     () => {
+//       console.log("ddd");
+//     }
+//   );
+//   if (isLoading) {
+//     return <LoadingSpinner />;
+//   }
+//   if (isError) {
+//     console.log(error);
+//   }
 
-  const toggleLikes = () => {
-    axios.post(`${process.env.REACT_APP_BASEURL}/api/reviews/${id}`);
-  };
-  return <div onClick={toggleLikes}>Likes</div>;
-};
+//   const toggleLikes = () => {
+//     console.log(accessToken);
+//   };
+//   return <div onClick={toggleLikes}>Likes</div>;
+// };
 
-export default Likes;
+// export default Likes;
