@@ -1,5 +1,4 @@
 import React, { useRef, useState } from "react";
-import UserProfile from "../components/UserProfile";
 import styled from "styled-components";
 
 import defaultProfileImg from "../assets/default_profile.jpeg";
@@ -8,37 +7,56 @@ import { subTitleColorCode } from "../constants/colorCode";
 
 import { Container } from "react-bootstrap";
 
+import { useMutation } from "react-query";
+import { uploadProfile } from "../axios/api";
 
 const UserProfileEdit = () => {
+    // console.log("files", file);
 
-  const [newimage, setNewImage] = useState("");
-  const [file, setFile] = useState("");
+    const [newimage, setNewImage] = useState("");
+    const [file, setFile] = useState("");
 
-  const onImgPostHandler = (event) => {
-    setNewImage([]);
-    for (let i = 0; i < event.target.files.length; i++) {
-      setFile(event.target.files[i]);
-      let reader = new FileReader();
-      reader.readAsDataURL(event.target.files[i]);
-      reader.addEventListener("loaded", (event) => {
-        newimage.src = event.target.result;
-      });
-      reader.onloadend = () => {
-        const base = reader.result;
-        if (base) {
-          const baseSub = base.toString();
-          setNewImage((newimage) => [...newimage, baseSub]);
+    const onImgPostHandler = (event) => {
+        setNewImage([]);
+        for (let i = 0; i < event.target.files.length; i++) {
+            setFile(event.target.files[i]);
+            let reader = new FileReader();
+            reader.readAsDataURL(event.target.files[i]);
+            reader.addEventListener("loaded", (event) => {
+                newimage.src = event.target.result;
+            });
+            reader.onloadend = () => {
+                const base = reader.result;
+                if (base) {
+                    const baseSub = base.toString();
+                    setNewImage((newimage) => [...newimage, baseSub]);
+                }
+            };
         }
-      };
-    }
-  };
+    };
 
+    const fileInput = useRef(null);
+    const onImgButton = (event) => {
+        event.preventDefault();
+        fileInput.current.click();
+    };
 
-  const fileInput = useRef(null);
-  const onImgButton = (event) => {
-    event.preventDefault();
-    fileInput.current.click();
-  };
+    const mutation = useMutation(uploadProfile, {
+        onSuccess: () => {
+            // queryClient.invalidateQueries("reviews");
+        },
+    });
+
+    const onSubmitPostHandler = async (event) => {
+        event.preventDefault();
+
+        const formData = new FormData();
+
+        formData.append("imgUrl", file);
+
+        mutation.mutate(formData);
+        alert("업로드 완료!");
+    };
 
     return (
         <>
@@ -59,7 +77,10 @@ const UserProfileEdit = () => {
                 </ProfileArea>
 
                 <Container>
-                    <form encType='multipart/form-data'>
+                    <form
+                        encType='multipart/form-data'
+                        onSubmit={onSubmitPostHandler}
+                    >
                         <input
                             type='file'
                             accept='img/*'

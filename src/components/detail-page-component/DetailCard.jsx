@@ -10,8 +10,6 @@ import { deleteReview, likeReview } from "../../api/getDetail";
 import { getDate } from "../../utils/getDate";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 
-
-
 const DetailCard = ({ detailData }) => {
     console.log(detailData);
     const accessToken = window.localStorage.getItem("accessToken");
@@ -48,12 +46,12 @@ const DetailCard = ({ detailData }) => {
     };
 
     useEffect(() => {
-        if(!detailData?.isPushed){
+        if (!detailData?.isPushed) {
             setIsfilled(false);
-        }else{
+        } else {
             setIsfilled(true);
         }
-    },[detailData]);
+    }, [detailData]);
 
     console.log(detailData?.isPushed);
 
@@ -76,16 +74,13 @@ const DetailCard = ({ detailData }) => {
         return JSON.parse(jsonPayload);
     };
 
-
     let curMemberName = null;
 
     //if문 accessToken이 null 아닐때만!
     //그래야 로그인x 유저도 detail page 접근
-    if(accessToken !== null){
+    if (accessToken !== null) {
         curMemberName = parseJwt(accessToken).sub;
     }
-    
-
 
     const handleEllipsisButtonModal = () => {
         setShowButtons(!showButtons);
@@ -127,20 +122,36 @@ const DetailCard = ({ detailData }) => {
                             alt='profile image'
                         />
                         <div>
-                            <NickNameInput>{detailData?.memberName}</NickNameInput>
-                            <PostingInfo>리뷰 {detailData?.reviewCount} </PostingInfo>
+                            <NickNameInput>
+                                {detailData?.memberName}
+                            </NickNameInput>
+                            <PostingInfo>
+                                리뷰 {detailData?.reviewCount}{" "}
+                            </PostingInfo>
                         </div>
                     </ProfileArea>
                 </ProfileBox>
                 <div style={{ display: "flex" }}>
-                    <LikesButton onClick={handleOnClickLikeBtn}>
-                        {detailData?.isPushed || isfilled ? (
-                            <AiFillHeart size={30} color='red' />
-                        ) : (
-                            <AiOutlineHeart size={30} />
-                        )}
-                        {detailData?.likeCount}
-                    </LikesButton>
+                    {accessToken === null ? (
+                        <LikesButton onClick={handleOnClickLikeBtn} disabled>
+                            {detailData?.isPushed || isfilled ? (
+                                <AiFillHeart size={30} color='red' />
+                            ) : (
+                                <AiOutlineHeart size={30} />
+                            )}
+                            {detailData?.likeCount}
+                        </LikesButton>
+                    ) : (
+                        <LikesButton onClick={handleOnClickLikeBtn}>
+                            {detailData?.isPushed || isfilled ? (
+                                <AiFillHeart size={30} color='red' />
+                            ) : (
+                                <AiOutlineHeart size={30} />
+                            )}
+                            {detailData?.likeCount}
+                        </LikesButton>
+                    )}
+
                     {detailData?.memberName == curMemberName && (
                         <BsThreeDotsVerticalStyle>
                             <BsThreeDotsVertical
@@ -310,7 +321,7 @@ const EachButton = styled.button`
 const ProfileArea = styled.div`
     display: flex;
     align-items: center;
-     margin-left: 10px;
+    margin-left: 10px;
 `;
 
 const PostingInfo = styled.div`
@@ -320,7 +331,7 @@ const PostingInfo = styled.div`
 `;
 
 const NickNameInput = styled.div`
- margin-left: 10px;
+    margin-left: 10px;
 `;
 
 const ProfileImg = {

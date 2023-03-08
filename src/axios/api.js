@@ -31,3 +31,21 @@ const uploadPost2 = async (formData) => {
 };
 
 export { uploadPost2 };
+
+
+export const uploadProfile = async (formData) => {
+  try {
+      const response = await baseURL.post(
+          "/api/members/profile",
+          formData,
+          {
+              headers: {
+                  "Content-Type": `multipart/form-data; `,
+              },
+          }
+      );
+      return response;
+  } catch {
+      alert("작성 오류입니다!");
+  }
+};
