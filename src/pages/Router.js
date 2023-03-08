@@ -14,7 +14,7 @@ const Router = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<MainPage />} />
         <Route path="/detail/:id" element={<Detail />} />
-        <Route path="/write" element={<Write />} />
+        <Route path="/write/:mode" element={<Write />} />
       </Routes>
     </BrowserRouter>
   );
