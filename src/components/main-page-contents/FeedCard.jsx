@@ -6,12 +6,14 @@ import { BiMap } from "react-icons/bi";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import defaultProfileImg from "../../assets/default_profile.jpeg";
 import UserProfile from "../UserProfile";
+import { subTitleColorCode } from "../../constants/colorCode";
 
 const FeedCard = ({ item }) => {
   const navigate = useNavigate();
   const goToDatailPage = () => {
-    navigate("/test", { state: { title: "title" } });
+    navigate(`/detail`, { state: { title: "title" } });
   };
+  console.log(item);
 
   return (
     <div>
@@ -52,7 +54,6 @@ const FeedBox = styled.div`
   width: 700px;
   padding: 10px;
   margin-top: 20px;
-  background-color: #d4d4d4;
 `;
 
 const ProfileBox = styled.div`
@@ -79,9 +80,13 @@ const ImgBox = styled.div`
 `;
 
 const LocationBox = styled.div`
+  display: inline-block;
+  padding-left: 5px;
+  border-radius: 10px;
   position: relative;
   top: 91%;
   left: 1%;
+  background-color: rgba(0, 0, 0, 0.5);
 `;
 
 const Desc = styled.div``;
@@ -100,7 +105,7 @@ const TagButton = styled.div`
 const Rest = styled.div`
   border-radius: 10px;
   padding: 10px;
-  background-color: #ebebeb;
+  border: 1px solid ${subTitleColorCode};
 `;
 
 const RestName = styled.div`

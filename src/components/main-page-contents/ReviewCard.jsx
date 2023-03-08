@@ -3,13 +3,14 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import defaultProfileImg from "../../assets/default_profile.jpeg";
 
-const ReviewCard = () => {
+const ReviewCard = ({ item }) => {
   const navigate = useNavigate();
   const goToDetailPage = (id) => {
     navigate(`/detail/${id}`);
   };
+
   return (
-    <div>
+    <div onClick={goToDetailPage}>
       <Picture>
         <Location align="left">울산시 태화동</Location>
         <RestName>토리스</RestName>

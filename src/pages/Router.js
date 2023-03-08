@@ -4,7 +4,7 @@ import Login from "./Login";
 import MainPage from "./MainPage";
 import Signup from "./Signup";
 import Detail from "../pages/Detail";
-import UserProfileEdit from "./UserProfileEdit";
+import UserProfile from "../components/UserProfile";
 import Write from "./Write";
 
 const Router = () => {
@@ -15,7 +15,7 @@ const Router = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<MainPage />} />
         <Route path="/detail/:id" element={<Detail />} />
-        <Route path="/myprofile" element={<UserProfileEdit />} />
+        <Route path="/userprofile" element={<UserProfile />} />
         <Route path="/write" element={<Write />} />
       </Routes>
     </BrowserRouter>

@@ -16,6 +16,7 @@ import {
   EmojiChoiceBox,
   Textarea,
 } from "./style";
+import { useLocation } from "react-router-dom";
 
 function Write() {
   //이중 for
