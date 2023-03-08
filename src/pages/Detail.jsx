@@ -28,6 +28,10 @@ function Detail() {
         return <h1>에러가 발생했습니다.</h1>;
     }
 
+    const navToHome = () => {
+        navigate("/");
+    };
+
     return (
         <>
             <Wrapper>
@@ -47,7 +51,7 @@ function Detail() {
                             <HiArrowLeft size={34} />
                         </Navbar.Brand>
                         <Navbar.Brand>
-                            <StyledButton variant='outline-dark'>
+                            <StyledButton variant='outline-dark' onClick={navToHome}>
                                 <GrHome /> MY플레이스홈
                             </StyledButton>
                         </Navbar.Brand>
@@ -56,7 +60,7 @@ function Detail() {
                         <StNameContainer>
                             {/* <h2>음식점이름</h2> */}
                             <h2>{detailData?.restaurantName}</h2>
-                            <div>❤️</div>
+                            {/* <div>❤️</div> */}
                         </StNameContainer>
                         {/* <StAddressContainer>주소</StAddressContainer> */}
                         <StAddressContainer>{detailData?.restaurantAddress}</StAddressContainer>

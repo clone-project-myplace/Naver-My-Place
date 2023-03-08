@@ -6,7 +6,8 @@ const config = (accessToken) => {
 
 export const getDetail = async (id) => {
     const response = await axios.get(
-        `${process.env.REACT_APP_BASEURL}/api/reviews/${id}`
+        `${process.env.REACT_APP_BASEURL}/api/reviews/${id}`,
+        
     );
     return response;
 };

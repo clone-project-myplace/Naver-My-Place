@@ -9,14 +9,16 @@ import UserProfile from "../UserProfile";
 import { useMutation } from "react-query";
 import { deleteReview, likeReview } from "../../api/getDetail";
 import { getDate } from "../../utils/getDate";
-import { AiOutlineHeart } from "react-icons/ai";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { Button } from "react-bootstrap";
 
 const DetailCard = ({ detailData }) => {
+    console.log(detailData);
     const accessToken = window.localStorage.getItem("accessToken");
 
     const [showButtons, setShowButtons] = useState(false);
     const [confirmDelete, setConfirmDelete] = useState(false);
+    const [isfilled, setIsfilled] = useState(false);
     const navigate = useNavigate();
 
     const { id } = useParams();
@@ -28,8 +30,6 @@ const DetailCard = ({ detailData }) => {
         {
             onSuccess: () => {
                 queryClient.invalidateQueries("getReview");
-                // console.log("Item deleted");
-                alert("삭제 완료!");
             },
         }
     );
@@ -56,8 +56,13 @@ const DetailCard = ({ detailData }) => {
     //     }
     // }, [likeReviewData]);
 
+    console.log(detailData?.isPushed);
+
+    if(detailData?.isPushed){
+        setIsfilled(true);
+    }
+
     //토큰 디코딩 -> memberName 가져오기
-    //if문 accessToken 이 undefined 아닐때만!
     const parseJwt = (accessToken) => {
         const base64Url = accessToken.split(".")[1];
         const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
@@ -76,9 +81,16 @@ const DetailCard = ({ detailData }) => {
         return JSON.parse(jsonPayload);
     };
 
-    const curMemberName = parseJwt(accessToken).sub;
 
-    console.log(curMemberName);
+    let curMemberName = null;
+
+    //if문 accessToken이 null 아닐때만!
+    //그래야 로그인x 유저도 detail page 접근
+    if(accessToken !== null){
+        curMemberName = parseJwt(accessToken).sub;
+    }
+    
+
 
     const handleEllipsisButtonModal = () => {
         setShowButtons(!showButtons);
@@ -99,11 +111,13 @@ const DetailCard = ({ detailData }) => {
 
     const handleDelete = () => {
         deleteReviewMutate();
+        alert("삭제 완료!");
         navigate(-1);
     };
 
     const handleOnClickLikeBtn = (e) => {
         e.stopPropagation();
+        setIsfilled(!isfilled);
         likeReviewMutate();
     };
 
@@ -111,21 +125,36 @@ const DetailCard = ({ detailData }) => {
         <DetailBox>
             <OuterBox>
                 <ProfileBox>
-                    <UserProfile />
-                    
-                </ProfileBox>
-                <Button color='error' onClick={handleOnClickLikeBtn}>
-                    <AiOutlineHeart />
-                    {detailData?.likeCount}
-                </Button>
-                {detailData?.memberName == curMemberName && (
-                    <BsThreeDotsVerticalStyle>
-                        <BsThreeDotsVertical
-                            style={{ cursor: "pointer" }}
-                            onClick={handleEllipsisButtonModal}
+                    <ProfileArea>
+                        <img
+                            src={detailData?.profileImgUrl}
+                            style={ProfileImg}
+                            alt='profile image'
                         />
-                    </BsThreeDotsVerticalStyle>
-                )}
+                        <div>
+                            <NickNameInput>{detailData?.memberName}</NickNameInput>
+                            <PostingInfo>리뷰 {detailData?.reviewCount} </PostingInfo>
+                        </div>
+                    </ProfileArea>
+                </ProfileBox>
+                <div style={{ display: "flex" }}>
+                    <LikesButton onClick={handleOnClickLikeBtn}>
+                        {isfilled ? (
+                            <AiFillHeart size={30} color='red' />
+                        ) : (
+                            <AiOutlineHeart size={30} />
+                        )}
+                        {detailData?.likeCount}
+                    </LikesButton>
+                    {detailData?.memberName == curMemberName && (
+                        <BsThreeDotsVerticalStyle>
+                            <BsThreeDotsVertical
+                                style={{ cursor: "pointer" }}
+                                onClick={handleEllipsisButtonModal}
+                            />
+                        </BsThreeDotsVerticalStyle>
+                    )}
+                </div>
             </OuterBox>
 
             <div style={{ position: "relative" }}>
@@ -216,6 +245,11 @@ const ImgBox = styled.div`
     justify-content: center;
 `;
 
+const LikesButton = styled.button`
+    border: none;
+    background-color: white;
+`;
+
 const StCardContentPicture = styled.img`
     min-height: 280px;
 
@@ -280,3 +314,26 @@ const EachButton = styled.button`
     border: 0;
     background: none;
 `;
+
+const ProfileArea = styled.div`
+    display: flex;
+    align-items: center;
+     margin-left: 10px;
+`;
+
+const PostingInfo = styled.div`
+    font-weight: 400;
+
+    margin-left: 10px;
+`;
+
+const NickNameInput = styled.div`
+ margin-left: 10px;
+`;
+
+const ProfileImg = {
+    padding: "2px",
+    borderRadius: "50%",
+    width: "60px",
+    height: "60px",
+};
