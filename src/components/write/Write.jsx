@@ -3,6 +3,8 @@ import { useMutation, useQueryClient } from "react-query";
 import { addReview, uploadPost, uploadPost2 } from "../../axios/api";
 import styled from "styled-components";
 import axios from "axios";
+import { faCameraAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import {
   WriteHeader,
@@ -15,13 +17,18 @@ import {
   EmojiPrice,
   EmojiChoiceBox,
   Textarea,
+  ReviewContainer,
+  ReviewTitle,
+  ReviewLable,
+  ReviewBtnTitle,
+  ReviewBtnSubTitle,
 } from "./style";
 
 function Write() {
   //이중 for
 
   const [Arr, setArr] = useState([]);
-  const [files, setFiles] = useState("");
+  // const [files, setFiles] = useState("");
 
   const [click, setClick] = useState("true");
   const [clickBtn, setClickBtn] = useState("white");
@@ -298,10 +305,6 @@ function Write() {
   });
 
   const fileInput = useRef(null);
-  const onImgButton = (event) => {
-    event.preventDefault();
-    fileInput.current.click();
-  };
 
   const [reviewContent, setReviewContent] = useState("");
   const [newimage, setNewImage] = useState("");
@@ -330,6 +333,7 @@ function Write() {
     }
   };
 
+  console.log("files", file);
   const onSubmitPostHandler = async (event) => {
     event.preventDefault();
 
@@ -655,18 +659,25 @@ function Write() {
         </EmojiChoiceContainer>
       </EmojiContainer>
       <form onSubmit={onSubmitPostHandler} encType="multipart/form-data">
-        <input
-          id="imgae"
-          type="file"
-          accept="img/*"
-          onChange={onImgPostHandler}
-          ref={fileInput}
-        />
-
-        <ImgBox src={newimage} alt="img" />
-        <div>
-          <div>리뷰를 남겨주세요</div>
-        </div>
+        <ReviewContainer>
+          <ReviewTitle>리뷰를 남겨주세요</ReviewTitle>
+          <ReviewLable htmlFor="input-file">
+            <FontAwesomeIcon icon={faCameraAlt} />
+            <ReviewBtnTitle>사진추가</ReviewBtnTitle>
+            <ReviewBtnSubTitle>최대 20장</ReviewBtnSubTitle>
+          </ReviewLable>
+          <input
+            id="input-file"
+            type="file"
+            accept="img/*"
+            onChange={onImgPostHandler}
+            ref={fileInput}
+            style={{ display: "none" }}
+          />
+        </ReviewContainer>
+        {file.length !== 0 ? <ImgBox src={newimage} alt="img" /> : <div></div>}
+        {/* 
+        <ImgBox src={newimage} alt="img" /> */}
 
         <div>
           <Textarea
@@ -684,10 +695,12 @@ function Write() {
 export default Write;
 
 const ImgBox = styled.img`
-  min-width: 300px;
-  min-height: 300px;
-  max-width: 500px;
-  max-height: 500px;
+  min-width: 200px;
+  min-height: 200px;
+  max-width: 200px;
+  max-height: 200px;
   background-color: #ebebeb;
   align-items: center;
+  margin-bottom: 50px;
+  object-fit: cover;
 `;

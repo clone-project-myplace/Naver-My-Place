@@ -109,7 +109,7 @@ const EmojiBtn = styled.button`
 
 const Textarea = styled.textarea`
   width: 800px;
-  height: 500px;
+  height: 200px;
   background: #f8f8f8;
   border-radius: 5px;
   padding: 20px;
@@ -117,8 +117,52 @@ const Textarea = styled.textarea`
   border: 0;
   outline: 0;
   border: 1px solid #f8f8f8;
+  resize: none;
+
+  &:focus {
+    border: 2px solid rgb(0, 128, 0);
+    background-color: white;
+  }
 `;
 
+const ReviewContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ReviewTitle = styled.span`
+  font-size: 23px;
+  font-weight: 600;
+  margin: 40px 0px;
+`;
+
+const ReviewLable = styled.label`
+  font-size: 20px;
+  font-weight: 600;
+  margin: 10px 0px;
+  border: 2px solid black;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 170px;
+  height: 60px;
+  border-radius: 10px;
+  cursor: pointer;
+`;
+
+const ReviewBtnTitle = styled.span`
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0px 7px;
+`;
+
+const ReviewBtnSubTitle = styled.span`
+  font-size: 13px;
+  opacity: 0.5;
+`;
 export {
   MainContainer,
   WriteHeader,
@@ -130,4 +174,9 @@ export {
   EmojiPrice,
   EmojiChoiceBox,
   Textarea,
+  ReviewContainer,
+  ReviewTitle,
+  ReviewLable,
+  ReviewBtnTitle,
+  ReviewBtnSubTitle,
 };
