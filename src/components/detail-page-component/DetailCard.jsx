@@ -5,12 +5,12 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { useState } from "react";
 import { useQueryClient } from "react-query";
 import DeleteModal from "./DeleteModal";
-import UserProfile from "../UserProfile";
 import { useMutation } from "react-query";
 import { deleteReview, likeReview } from "../../api/getDetail";
 import { getDate } from "../../utils/getDate";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
-import { Button } from "react-bootstrap";
+
+
 
 const DetailCard = ({ detailData }) => {
     console.log(detailData);
@@ -20,8 +20,6 @@ const DetailCard = ({ detailData }) => {
     const [confirmDelete, setConfirmDelete] = useState(false);
     const [isfilled, setIsfilled] = useState(false);
     const navigate = useNavigate();
-
-    const { id } = useParams();
 
     const queryClient = useQueryClient();
 
@@ -44,12 +42,10 @@ const DetailCard = ({ detailData }) => {
         }
     );
     const navToEditButton = () => {
-        navigate("/write", {
+        navigate("/write/edit", {
             state: { detailData },
         });
     };
-
-
 
     useEffect(() => {
         if(!detailData?.isPushed){
@@ -192,9 +188,6 @@ const DetailCard = ({ detailData }) => {
                 {detailData?.keywordList.map((item, index) => {
                     return <TagButton key={index}> {item} </TagButton>;
                 })}
-                {/*map으로 데이터 꺼내주기 */}
-                {/* <TagButton>음식이 맛있어요</TagButton>
-                <TagButton>기분이 좋아요</TagButton> */}
             </Tag>
             <Footer>{getDate(detailData?.createdDate)}</Footer>
         </DetailBox>
