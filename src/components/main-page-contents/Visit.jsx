@@ -28,7 +28,6 @@ const Visit = () => {
     return <LoadingSpinner />;
   }
   if (isError) {
-    console.log(error);
   }
 
   const visitList = data.data.data;

@@ -34,16 +34,9 @@ function Write() {
   const location = useLocation();
 
   if (mode === "edit") {
-    // console.log("location.state", location.state);
-    // console.log("location.state.", location.state.detailData.reviewId);
-    // console.log("params", mode);
   }
 
   if (mode === "create") {
-    // console.log("create : ", location.state.visitedRestaurantId);
-    // console.log("location.state", location.state);
-    // console.log("location.stateFFFFFF.", location.state.visitedRestaurantName);
-    // console.log("params", mode);
   }
 
   // TODO : 리팩토링 할떄 useState 딕셔너리로 관리
@@ -406,7 +399,6 @@ function Write() {
   };
   const formData = new FormData();
 
-  console.log("TARGET", location.state?.visitedRestaurantId);
   const accessToken = window.localStorage.getItem("accessToken");
   const mutationCreate = useMutation(() =>
     createReview(location.state.item.visitedRestaurantId, formData, accessToken)
@@ -426,34 +418,28 @@ function Write() {
     if (mode === "create") {
       event.preventDefault();
       const restaurantId = location.state.item.visitedRestaurantId;
-      // console.log("restaurantId", restaurantId);
 
       formData.append("reviewKeywordList", Arr);
       formData.append("reviewPhotoUrl", file);
       formData.append("reviewContents", reviewContent);
 
-      console.log("formData", formData);
       mutationCreate.mutate(restaurantId, formData);
 
       // TODO : navigate위치 작성하기
       navigate("/");
     } else {
       event.preventDefault();
-      console.log("수정하기 클릭");
 
       const reviewId = location.state.detailData.reviewId;
-      // console.log("restaurantId", reviewId);
 
       formData.append("contents", reviewContent);
       // formData.set("contents", reviewContent);
-      console.log("formData", formData);
 
       mutationUpdate.mutate(reviewId, formData);
 
       navigate("/detail/" + reviewId);
     }
   };
-  // console.log("Arr", Arr);
 
   return (
     <MainContainer>

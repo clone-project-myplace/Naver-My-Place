@@ -11,7 +11,6 @@ export const deleteReview = async (id, accessToken) => {
       headers: config(accessToken),
     }
   );
-  console.log(res);
   return res;
 };
 

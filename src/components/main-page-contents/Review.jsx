@@ -26,7 +26,6 @@ const Review = () => {
     return <LoadingSpinner />;
   }
   if (isError) {
-    console.log(error);
   }
 
   const reviewList = data?.data.data;

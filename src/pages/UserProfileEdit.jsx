@@ -19,7 +19,6 @@ const UserProfileEdit = () => {
 
   const location = useLocation();
 
-  console.log(location.state);
   const receivedNickname = location.state.currentNickname;
   const receivedImgUrl = location.state.currentImgUrl;
 

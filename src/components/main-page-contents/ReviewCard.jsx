@@ -4,8 +4,6 @@ import styled from "styled-components";
 import { AiOutlineHeart } from "react-icons/ai";
 
 const ReviewCard = ({ item }) => {
-  console.log(item);
-
   const navigate = useNavigate();
   const goToDetailPage = (id) => {
     navigate(`/detail/${id}`, {

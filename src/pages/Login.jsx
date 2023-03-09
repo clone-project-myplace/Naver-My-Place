@@ -27,7 +27,7 @@ const Login = () => {
         window.localStorage.setItem("accessToken", res.headers.authorization);
         navigate("/");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {});
   };
   return (
     <Container>

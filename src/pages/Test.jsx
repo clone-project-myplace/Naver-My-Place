@@ -14,9 +14,7 @@ function Test() {
   const [testList, setTestList] = useState([]);
   // ...
   useEffect(() => {
-    console.log("page: ", page);
     setTestList([...testList, ...dataList]);
-    console.log(testList);
   }, [page]);
   const { data } = useQuery(["getTestData"], () => {
     return axios.get("http://localhost:5000/memo").then((res) => {

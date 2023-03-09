@@ -9,7 +9,6 @@ import { useQuery } from "react-query";
 import axios from "axios";
 
 const UserProfile = ({ editable, profileImg, reviewCountt }) => {
-  console.log(reviewCountt);
   const navigate = useNavigate();
   const accessToken = window.localStorage.getItem("accessToken");
 

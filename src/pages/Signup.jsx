@@ -14,6 +14,9 @@ const Signup = () => {
   const navigate = useNavigate();
   const { register, handleSubmit } = useForm();
 
+  const goToLogin = () => {
+    navigate("/login");
+  };
   const postSignup = (data) => {
     if (data.memberPw !== data.memberPwConfirm) {
       alert("비밀번호가 일치하지 않습니다");
@@ -22,7 +25,6 @@ const Signup = () => {
     axios
       .post(`${process.env.REACT_APP_BASEURL}/api/members/signup`, data)
       .then((res) => {
-        console.log(res);
         navigate("/login");
       })
       .catch((err) => alert(err.response.data.error.msg));
@@ -51,7 +53,7 @@ const Signup = () => {
         <MiddleInput>
           <CiUser />
           <InputStyle
-            type="text"
+            type="password"
             placeholder="비밀번호"
             {...register("memberPw", { required: "아이디를 입력해주세요" })}
           />
@@ -67,8 +69,12 @@ const Signup = () => {
           />
         </PasswordInput>
         <div>
-          <LoginSignupButtonStyle type="submit" style={{ marginTop: "30px" }}>
-            로그인
+          <LoginSignupButtonStyle
+            type="submit"
+            style={{ marginTop: "30px" }}
+            onClick={goToLogin}
+          >
+            회원가입
           </LoginSignupButtonStyle>
         </div>
       </FormStyle>
