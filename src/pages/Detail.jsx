@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useQuery } from "react-query";
 import { useParams, useNavigate } from "react-router-dom";
 import DetailCard from "../components/detail-page-component/DetailCard";
 import { Navbar, Button } from "react-bootstrap";
@@ -37,7 +37,7 @@ function Detail() {
     const detailData = data?.data.data;
 
     if (isError) {
-        // 큼..!
+    
         return <h1>에러가 발생했습니다.</h1>;
     }
 
@@ -74,11 +74,8 @@ function Detail() {
                     </Navbar>
                     <StContainer>
                         <StNameContainer>
-                            {/* <h2>음식점이름</h2> */}
                             <h2>{detailData?.restaurantName}</h2>
-                            {/* <div>❤️</div> */}
                         </StNameContainer>
-                        {/* <StAddressContainer>주소</StAddressContainer> */}
                         <StAddressContainer>
                             {detailData?.restaurantAddress}
                         </StAddressContainer>
@@ -137,6 +134,4 @@ const StyledButton = styled(Button)`
         color: #212529;
         box-shadow: none;
     }
-
-    /* border-color: #b5b5b5; */
 `;

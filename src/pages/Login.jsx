@@ -18,20 +18,18 @@ const Login = () => {
 
   const postLogin = (data) => {
     const userInfo = { memberId: data.memberId, memberPw: data.memberPw };
-    console.log(userInfo);
     axios
       .post(`${process.env.REACT_APP_BASEURL}/api/members/login`, data)
       .then((res) => {
         window.localStorage.setItem("accessToken", res.headers.authorization);
-        console.log("res.headers.authorization : ", res.headers.authorization);
         navigate("/");
       })
       .catch((err) => console.log(err));
   };
   return (
     <Container>
-      <form onSubmit={handleSubmit((data) => postLogin(data))}>
-        <LogoStyle>NAVER</LogoStyle>
+      <FormStyle onSubmit={handleSubmit((data) => postLogin(data))}>
+        <LogoStyle style={{ marginBottom: "30px" }}>NAVER</LogoStyle>
         <IdInput>
           <CiUser />
           <InputStyle
@@ -51,14 +49,24 @@ const Login = () => {
           />
         </PasswordInput>
         <div>
-          <LoginSignupButtonStyle type="submit">로그인</LoginSignupButtonStyle>
+          <LoginSignupButtonStyle type="submit" style={{ marginTop: "30px" }}>
+            로그인
+          </LoginSignupButtonStyle>
         </div>
-      </form>
+      </FormStyle>
     </Container>
   );
 };
 
 export default Login;
+
+const FormStyle = styled.form`
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  text-align: center;
+  padding: 20px;
+`;
 
 const LogoStyle = styled.div`
   color: ${naverColorCode};
@@ -88,6 +96,7 @@ const InputStyle = styled.input`
   border: none;
   width: 95%;
   margin-left: 10px;
+  background-color: rgb(249, 249, 249);
 
   :focus {
     outline: none;

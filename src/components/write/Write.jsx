@@ -22,29 +22,34 @@ import {
   ReviewLable,
   ReviewBtnTitle,
   ReviewBtnSubTitle,
+  WriteHeaderSubTitle,
 } from "./style";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { getDate } from "../../utils/getDate";
+import { createReview, updateReview } from "../../api/getDetail";
 
 function Write() {
   const navigate = useNavigate();
   const { mode } = useParams();
   const location = useLocation();
 
-
   if (mode === "edit") {
-    console.log("location.state", location.state);
-    console.log("location.state.", location.state.detailData.reviewContents);
-    console.log("params", mode);
+    // console.log("location.state", location.state);
+    // console.log("location.state.", location.state.detailData.reviewId);
+    // console.log("params", mode);
   }
 
+  if (mode === "create") {
+    // console.log("location.state", location.state);
+    // console.log("location.state.", location.state.visitedRestaurantName);
+    // console.log("params", mode);
+  }
 
-  //이중 for
+  // TODO : 리팩토링 할떄 useState 딕셔너리로 관리
   // const [files, setFiles] = useState("");
   const [Arr, setArr] = useState([]);
   const [click, setClick] = useState("true");
   const [clickBtn, setClickBtn] = useState("white");
-
-  console.log(Arr);
 
   const [click2, setClick2] = useState("true");
   const [clickBtn2, setClickBtn2] = useState("white");
@@ -117,7 +122,6 @@ function Write() {
     } else {
       setClick2("false");
       setClickBtn2("#00CC99");
-
       setArr([...Arr, "K2"]);
     }
   };
@@ -309,9 +313,69 @@ function Write() {
 
   //Todo : 이미지
 
+  useEffect(() => {
+    if (mode === "edit") {
+      setArr(location.state.detailData.keywordType);
+      for (let i = 0; i < location.state.detailData.keywordType.length; i++) {
+        if (location.state.detailData.keywordType[i] === "K1") {
+          setClick("false");
+          setClickBtn("#00CC99");
+        } else if (location.state.detailData.keywordType[i] === "K2") {
+          setClick2("false");
+          setClickBtn2("#00CC99");
+        } else if (location.state.detailData.keywordType[i] === "K3") {
+          setClick3("false");
+          setClickBtn3("#00CC99");
+        } else if (location.state.detailData.keywordType[i] === "K4") {
+          setClick4("false");
+          setClickBtn4("#00CC99");
+        } else if (location.state.detailData.keywordType[i] === "K5") {
+          setClick5("false");
+          setClickBtn5("#00CC99");
+        } else if (location.state.detailData.keywordType[i] === "K6") {
+          setClick6("false");
+          setClickBtn6("#00CC99");
+        } else if (location.state.detailData.keywordType[i] === "K7") {
+          setClick7("false");
+          setClickBtn7("#00CC99");
+        } else if (location.state.detailData.keywordType[i] === "K8") {
+          setClick8("false");
+          setClickBtn8("#00CC99");
+        } else if (location.state.detailData.keywordType[i] === "K9") {
+          setClick9("false");
+          setClickBtn9("#00CC99");
+        } else if (location.state.detailData.keywordType[i] === "K10") {
+          setClick10("false");
+          setClickBtn10("#00CC99");
+        } else if (location.state.detailData.keywordType[i] === "K11") {
+          setClick11("false");
+          setClickBtn11("#00CC99");
+        } else if (location.state.detailData.keywordType[i] === "K12") {
+          setClick12("false");
+          setClickBtn12("#00CC99");
+        } else if (location.state.detailData.keywordType[i] === "K13") {
+          setClick13("false");
+          setClickBtn13("#00CC99");
+        } else if (location.state.detailData.keywordType[i] === "K14") {
+          setClick14("false");
+          setClickBtn14("#00CC99");
+        } else if (location.state.detailData.keywordType[i] === "K15") {
+          setClick15("false");
+          setClickBtn15("#00CC99");
+        }
+      }
+    }
+  }, []);
+
   //Todo : 리뷰 작성
   const queryClient = useQueryClient();
   const mutation = useMutation(uploadPost2, {
+    onSuccess: () => {
+      // queryClient.invalidateQueries("reviews");
+    },
+  });
+
+  const mutation2 = useMutation(uploadPost, {
     onSuccess: () => {
       // queryClient.invalidateQueries("reviews");
     },
@@ -345,38 +409,71 @@ function Write() {
       };
     }
   };
+  const formData = new FormData();
 
-  console.log("files", file);
+  const accessToken = window.localStorage.getItem("accessToken");
+  const mutationCreate = useMutation(() =>
+    createReview(location.state.visitedRestaurantId, formData, accessToken)
+  );
+
+  const mutationUpdate = useMutation(() =>
+    updateReview(location.state.detailData.reviewId, formData, accessToken)
+  );
+
   const onSubmitPostHandler = async (event) => {
-    event.preventDefault();
+    if (mode === "create") {
+      event.preventDefault();
+      const restaurantId = location.state.visitedRestaurantId;
+      // console.log("restaurantId", restaurantId);
 
-    const formData = new FormData();
+      formData.append("reviewKeywordList", Arr);
+      formData.append("reviewPhotoUrl", file);
+      formData.append("reviewContents", reviewContent);
 
-    formData.append("reviewKeywordList", Arr);
-    formData.append("reviewPhotoUrl", file);
-    formData.append("reviewContents", reviewContent);
-    // console.log("Arr", Arr);
-    // console.log("file", file);
-    // console.log("reviewContent", reviewContent);
+      console.log("formData", formData);
+      mutationCreate.mutate(restaurantId, formData);
 
-    // console.log(
-    //   "formData.get(reviewKeywordList)",
-    //   formData.get("reviewKeywordList")
-    // );
-    // console.log("formData.get(reviewPhotoUrl)", formData.get("reviewPhotoUrl"));
-    // console.log("formData.get(reviewContents)", formData.get("reviewContents"));
+      // TODO : navigate위치 작성하기
+      // navigate("/review/detail/" + location.state.visitedRestaurantId);
+    } else {
+      event.preventDefault();
+      console.log("수정하기 클릭");
 
-    mutation.mutate(formData);
-    // alert("업로드 완료!");
+      const reviewId = location.state.detailData.reviewId;
+      // console.log("restaurantId", reviewId);
+
+      formData.append("contents", reviewContent);
+      // formData.set("contents", reviewContent);
+      console.log("formData", formData);
+
+      mutationUpdate.mutate(reviewId, formData);
+
+      navigate("/review/detail/" + reviewId);
+    }
   };
+  // console.log("Arr", Arr);
 
   return (
     <MainContainer>
-      <WriteHeader>
-        <WriteHeaderTitle>스타벅스 이수 자이점</WriteHeaderTitle>
-        <div>2023.03.03 (금)</div>
-        <div>따뜻한 아이스 아메리카노</div>
-      </WriteHeader>
+      {mode === "edit" ? (
+        <WriteHeader>
+          <WriteHeaderTitle>
+            {location.state.detailData.restaurantName}
+          </WriteHeaderTitle>
+          <WriteHeaderSubTitle>
+            {getDate(location.state.detailData.createdDate)}
+          </WriteHeaderSubTitle>
+        </WriteHeader>
+      ) : (
+        <WriteHeader>
+          <WriteHeaderTitle>
+            {location.state.visitedRestaurantName}
+          </WriteHeaderTitle>
+          <WriteHeaderSubTitle>
+            {location.state.visitedDate}
+          </WriteHeaderSubTitle>
+        </WriteHeader>
+      )}
 
       <EmojiContainer>
         <EmojiTitle>어떤 점이 좋았나요?</EmojiTitle>
@@ -385,7 +482,25 @@ function Write() {
         <EmojiChoiceContainer>
           <EmojiPrice>
             <div>음식/가격</div>
-            {clickBtn === "#00CC99" ? (
+            {mode === "edit" ? (
+              clickBtn === "#00CC99" ? (
+                <EmojiChoiceBox
+                  emoji="🍰"
+                  textColor="white"
+                  btnColor={clickBtn}
+                  fontWeight="600"
+                  text="디저트가 맛있어요"
+                />
+              ) : (
+                <EmojiChoiceBox
+                  emoji="🍰"
+                  textColor="white"
+                  fontWeight="600"
+                  btnColor="gray"
+                  text="디저트가 맛있어요"
+                />
+              )
+            ) : clickBtn === "#00CC99" ? (
               <EmojiChoiceBox
                 emoji="🍰"
                 textColor="white"
@@ -403,7 +518,27 @@ function Write() {
                 text="디저트가 맛있어요"
               />
             )}
-            {clickBtn2 === "#00CC99" ? (
+
+            {mode === "edit" ? (
+              clickBtn2 === "#00CC99" ? (
+                <EmojiChoiceBox
+                  emoji="🪙"
+                  textColor="white"
+                  btnColor={clickBtn2}
+                  fontWeight="600"
+                  text="가성비가 좋아요"
+                  disabled
+                />
+              ) : (
+                <EmojiChoiceBox
+                  emoji="🪙"
+                  textColor="white"
+                  fontWeight="600"
+                  btnColor="gray"
+                  text="가성비가 좋아요"
+                />
+              )
+            ) : clickBtn2 === "#00CC99" ? (
               <EmojiChoiceBox
                 emoji="🪙"
                 textColor="white"
@@ -421,7 +556,26 @@ function Write() {
                 text="가성비가 좋아요"
               />
             )}
-            {clickBtn3 === "#00CC99" ? (
+            {/*  */}
+            {mode === "edit" ? (
+              clickBtn3 === "#00CC99" ? (
+                <EmojiChoiceBox
+                  emoji="🍹"
+                  textColor="white"
+                  btnColor={clickBtn3}
+                  fontWeight="600"
+                  text="음료가 맛있어요"
+                />
+              ) : (
+                <EmojiChoiceBox
+                  emoji="🍹"
+                  textColor="white"
+                  fontWeight="600"
+                  btnColor="gray"
+                  text="음료가 맛있어요"
+                />
+              )
+            ) : clickBtn3 === "#00CC99" ? (
               <EmojiChoiceBox
                 emoji="🍹"
                 textColor="white"
@@ -439,7 +593,26 @@ function Write() {
                 text="음료가 맛있어요"
               />
             )}
-            {clickBtn4 === "#00CC99" ? (
+            {/*  */}
+            {mode === "edit" ? (
+              clickBtn4 === "#00CC99" ? (
+                <EmojiChoiceBox
+                  emoji="👨‍🍳"
+                  textColor="white"
+                  btnColor={clickBtn4}
+                  fontWeight="600"
+                  text="특별한 메뉴가 있어요"
+                />
+              ) : (
+                <EmojiChoiceBox
+                  emoji="👨‍🍳"
+                  textColor="white"
+                  fontWeight="600"
+                  btnColor="gray"
+                  text="특별한 메뉴가 있어요"
+                />
+              )
+            ) : clickBtn4 === "#00CC99" ? (
               <EmojiChoiceBox
                 emoji="👨‍🍳"
                 textColor="white"
@@ -457,7 +630,26 @@ function Write() {
                 text="특별한 메뉴가 있어요"
               />
             )}
-            {clickBtn5 === "#00CC99" ? (
+            {/*  */}
+            {mode === "edit" ? (
+              clickBtn5 === "#00CC99" ? (
+                <EmojiChoiceBox
+                  emoji="☕"
+                  textColor="white"
+                  btnColor={clickBtn5}
+                  fontWeight="600"
+                  text="커피가 맛있어요"
+                />
+              ) : (
+                <EmojiChoiceBox
+                  emoji="☕"
+                  textColor="white"
+                  fontWeight="600"
+                  btnColor="gray"
+                  text="커피가 맛있어요"
+                />
+              )
+            ) : clickBtn5 === "#00CC99" ? (
               <EmojiChoiceBox
                 emoji="☕"
                 textColor="white"
@@ -475,13 +667,33 @@ function Write() {
                 text="커피가 맛있어요"
               />
             )}
+            {/*  */}
           </EmojiPrice>
 
           <EmojiPrice>
             <div>분위기</div>
-            {clickBtn6 === "#00CC99" ? (
+            {/* 6th */}
+            {mode === "edit" ? (
+              clickBtn6 === "#00CC99" ? (
+                <EmojiChoiceBox
+                  emoji="😀"
+                  textColor="white"
+                  btnColor={clickBtn6}
+                  fontWeight="600"
+                  text="대화하기 좋아요"
+                />
+              ) : (
+                <EmojiChoiceBox
+                  emoji="😀"
+                  textColor="white"
+                  fontWeight="600"
+                  btnColor="gray"
+                  text="대화하기 좋아요"
+                />
+              )
+            ) : clickBtn6 === "#00CC99" ? (
               <EmojiChoiceBox
-                emoji="🍰"
+                emoji="😀"
                 textColor="white"
                 btnColor={clickBtn6}
                 onClick={Click6}
@@ -490,16 +702,36 @@ function Write() {
               />
             ) : (
               <EmojiChoiceBox
-                emoji="🍰"
+                emoji="😀"
                 textColor="black"
                 btnColor={clickBtn6}
                 onClick={Click6}
                 text="대화하기 좋아요"
               />
             )}
-            {clickBtn7 === "#00CC99" ? (
+
+            {/* 7th */}
+            {mode === "edit" ? (
+              clickBtn7 === "#00CC99" ? (
+                <EmojiChoiceBox
+                  emoji="🪟"
+                  textColor="white"
+                  btnColor={clickBtn7}
+                  fontWeight="600"
+                  text="뷰가 좋아요"
+                />
+              ) : (
+                <EmojiChoiceBox
+                  emoji="🪟"
+                  textColor="white"
+                  fontWeight="600"
+                  btnColor="gray"
+                  text="뷰가 좋아요"
+                />
+              )
+            ) : clickBtn7 === "#00CC99" ? (
               <EmojiChoiceBox
-                emoji="🪙"
+                emoji="🪟"
                 textColor="white"
                 btnColor={clickBtn7}
                 onClick={Click7}
@@ -508,16 +740,37 @@ function Write() {
               />
             ) : (
               <EmojiChoiceBox
-                emoji="🪙"
+                emoji="🪟"
                 textColor="black"
                 btnColor={clickBtn7}
                 onClick={Click7}
                 text="뷰가 좋아요"
               />
             )}
-            {clickBtn8 === "#00CC99" ? (
+
+            {/* 8th */}
+
+            {mode === "edit" ? (
+              clickBtn8 === "#00CC99" ? (
+                <EmojiChoiceBox
+                  emoji="📷"
+                  textColor="white"
+                  btnColor={clickBtn8}
+                  fontWeight="600"
+                  text="사진이 잘 나와요"
+                />
+              ) : (
+                <EmojiChoiceBox
+                  emoji="📷"
+                  textColor="white"
+                  fontWeight="600"
+                  btnColor="gray"
+                  text="사진이 잘 나와요"
+                />
+              )
+            ) : clickBtn8 === "#00CC99" ? (
               <EmojiChoiceBox
-                emoji="🍹"
+                emoji="📷"
                 textColor="white"
                 btnColor={clickBtn8}
                 onClick={Click8}
@@ -526,16 +779,36 @@ function Write() {
               />
             ) : (
               <EmojiChoiceBox
-                emoji="🍹"
+                emoji="📷"
                 textColor="black"
                 btnColor={clickBtn8}
                 onClick={Click8}
                 text="사진이 잘 나와요"
               />
             )}
-            {clickBtn9 === "#00CC99" ? (
+            {/* 9th */}
+
+            {mode === "edit" ? (
+              clickBtn9 === "#00CC99" ? (
+                <EmojiChoiceBox
+                  emoji="🪑"
+                  textColor="white"
+                  btnColor={clickBtn9}
+                  fontWeight="600"
+                  text="인테리어가 멋져요"
+                />
+              ) : (
+                <EmojiChoiceBox
+                  emoji="🪑"
+                  textColor="white"
+                  fontWeight="600"
+                  btnColor="gray"
+                  text="인테리어가 멋져요"
+                />
+              )
+            ) : clickBtn9 === "#00CC99" ? (
               <EmojiChoiceBox
-                emoji="👨‍🍳"
+                emoji="🪑"
                 textColor="white"
                 btnColor={clickBtn9}
                 onClick={Click9}
@@ -544,16 +817,37 @@ function Write() {
               />
             ) : (
               <EmojiChoiceBox
-                emoji="👨‍🍳"
+                emoji="🪑"
                 textColor="black"
                 btnColor={clickBtn9}
                 onClick={Click9}
                 text="인테리어가 멋져요"
               />
             )}
-            {clickBtn10 === "#00CC99" ? (
+
+            {/* 10th */}
+
+            {mode === "edit" ? (
+              clickBtn10 === "#00CC99" ? (
+                <EmojiChoiceBox
+                  emoji="💻"
+                  textColor="white"
+                  btnColor={clickBtn10}
+                  fontWeight="600"
+                  text="집중하기 좋아요"
+                />
+              ) : (
+                <EmojiChoiceBox
+                  emoji="💻"
+                  textColor="white"
+                  fontWeight="600"
+                  btnColor="gray"
+                  text="집중하기 좋아요"
+                />
+              )
+            ) : clickBtn10 === "#00CC99" ? (
               <EmojiChoiceBox
-                emoji="☕"
+                emoji="💻"
                 textColor="white"
                 btnColor={clickBtn10}
                 onClick={Click10}
@@ -562,7 +856,7 @@ function Write() {
               />
             ) : (
               <EmojiChoiceBox
-                emoji="☕"
+                emoji="💻"
                 textColor="black"
                 btnColor={clickBtn10}
                 onClick={Click10}
@@ -573,9 +867,30 @@ function Write() {
 
           <EmojiPrice>
             <div>편의시설/기타</div>
-            {clickBtn11 === "#00CC99" ? (
+
+            {/* 11th */}
+
+            {mode === "edit" ? (
+              clickBtn11 === "#00CC99" ? (
+                <EmojiChoiceBox
+                  emoji="🚻"
+                  textColor="white"
+                  btnColor={clickBtn11}
+                  fontWeight="600"
+                  text="화장실이 깨끗해요"
+                />
+              ) : (
+                <EmojiChoiceBox
+                  emoji="🚻"
+                  textColor="white"
+                  fontWeight="600"
+                  btnColor="gray"
+                  text="화장실이 깨끗해요"
+                />
+              )
+            ) : clickBtn11 === "#00CC99" ? (
               <EmojiChoiceBox
-                emoji="🍰"
+                emoji="🚻"
                 textColor="white"
                 btnColor={clickBtn11}
                 onClick={Click11}
@@ -584,16 +899,36 @@ function Write() {
               />
             ) : (
               <EmojiChoiceBox
-                emoji="🍰"
+                emoji="🚻"
                 textColor="black"
                 btnColor={clickBtn11}
                 onClick={Click11}
                 text="화장실이 깨끗해요"
               />
             )}
-            {clickBtn12 === "#00CC99" ? (
+
+            {/* 12th */}
+            {mode === "edit" ? (
+              clickBtn12 === "#00CC99" ? (
+                <EmojiChoiceBox
+                  emoji="🛌🏻"
+                  textColor="white"
+                  btnColor={clickBtn12}
+                  fontWeight="600"
+                  text="좌석이 편해요"
+                />
+              ) : (
+                <EmojiChoiceBox
+                  emoji="🛌🏻"
+                  textColor="white"
+                  fontWeight="600"
+                  btnColor="gray"
+                  text="좌석이 편해요"
+                />
+              )
+            ) : clickBtn12 === "#00CC99" ? (
               <EmojiChoiceBox
-                emoji="🪙"
+                emoji="🛌🏻"
                 textColor="white"
                 btnColor={clickBtn12}
                 onClick={Click12}
@@ -602,16 +937,36 @@ function Write() {
               />
             ) : (
               <EmojiChoiceBox
-                emoji="🪙"
+                emoji="🛌🏻"
                 textColor="black"
                 btnColor={clickBtn12}
                 onClick={Click12}
                 text="좌석이 편해요"
               />
             )}
-            {clickBtn13 === "#00CC99" ? (
+
+            {/* 13th */}
+            {mode === "edit" ? (
+              clickBtn13 === "#00CC99" ? (
+                <EmojiChoiceBox
+                  emoji="✨"
+                  textColor="white"
+                  btnColor={clickBtn13}
+                  fontWeight="600"
+                  text="매장이 청결해요"
+                />
+              ) : (
+                <EmojiChoiceBox
+                  emoji="✨"
+                  textColor="white"
+                  fontWeight="600"
+                  btnColor="gray"
+                  text="매장이 청결해요"
+                />
+              )
+            ) : clickBtn13 === "#00CC99" ? (
               <EmojiChoiceBox
-                emoji="🍹"
+                emoji="✨"
                 textColor="white"
                 btnColor={clickBtn13}
                 onClick={Click13}
@@ -620,16 +975,36 @@ function Write() {
               />
             ) : (
               <EmojiChoiceBox
-                emoji="🍹"
+                emoji="✨"
                 textColor="black"
                 btnColor={clickBtn13}
                 onClick={Click13}
                 text="매장이 청결해요"
               />
             )}
-            {clickBtn14 === "#00CC99" ? (
+
+            {/* 14th */}
+            {mode === "edit" ? (
+              clickBtn14 === "#00CC99" ? (
+                <EmojiChoiceBox
+                  emoji="🅿️"
+                  textColor="white"
+                  btnColor={clickBtn14}
+                  fontWeight="600"
+                  text="주차하기 편해요"
+                />
+              ) : (
+                <EmojiChoiceBox
+                  emoji="🅿️"
+                  textColor="white"
+                  fontWeight="600"
+                  btnColor="gray"
+                  text="주차하기 편해요"
+                />
+              )
+            ) : clickBtn14 === "#00CC99" ? (
               <EmojiChoiceBox
-                emoji="👨‍🍳"
+                emoji="🅿️"
                 textColor="white"
                 btnColor={clickBtn14}
                 onClick={Click14}
@@ -638,16 +1013,36 @@ function Write() {
               />
             ) : (
               <EmojiChoiceBox
-                emoji="👨‍🍳"
+                emoji="🅿️"
                 textColor="black"
                 btnColor={clickBtn14}
                 onClick={Click14}
                 text="주차하기 편해요"
               />
             )}
-            {clickBtn15 === "#00CC99" ? (
+
+            {/* 15th */}
+            {mode === "edit" ? (
+              clickBtn15 === "#00CC99" ? (
+                <EmojiChoiceBox
+                  emoji="❤️"
+                  textColor="white"
+                  btnColor={clickBtn15}
+                  fontWeight="600"
+                  text="친절해요"
+                />
+              ) : (
+                <EmojiChoiceBox
+                  emoji="❤️"
+                  textColor="white"
+                  fontWeight="600"
+                  btnColor="gray"
+                  text="친절해요"
+                />
+              )
+            ) : clickBtn15 === "#00CC99" ? (
               <EmojiChoiceBox
-                emoji="☕"
+                emoji="❤️"
                 textColor="white"
                 btnColor={clickBtn15}
                 onClick={Click15}
@@ -656,7 +1051,7 @@ function Write() {
               />
             ) : (
               <EmojiChoiceBox
-                emoji="☕"
+                emoji="❤️"
                 textColor="black"
                 btnColor={clickBtn15}
                 onClick={Click15}
@@ -673,30 +1068,58 @@ function Write() {
       <form onSubmit={onSubmitPostHandler} encType="multipart/form-data">
         <ReviewContainer>
           <ReviewTitle>리뷰를 남겨주세요</ReviewTitle>
-          <ReviewLable htmlFor="input-file">
-            <FontAwesomeIcon icon={faCameraAlt} />
-            <ReviewBtnTitle>사진추가</ReviewBtnTitle>
-            <ReviewBtnSubTitle>최대 20장</ReviewBtnSubTitle>
-          </ReviewLable>
-          <input
-            id="input-file"
-            type="file"
-            accept="img/*"
-            onChange={onImgPostHandler}
-            ref={fileInput}
-            style={{ display: "none" }}
-          />
+
+          {mode === "edit" ? (
+            <ReviewLable htmlFor="input-file">
+              <FontAwesomeIcon color="gray" icon={faCameraAlt} />
+              <ReviewBtnTitle style={{ color: "gray" }}>
+                사진추가
+              </ReviewBtnTitle>
+              <ReviewBtnSubTitle>업로드 완료</ReviewBtnSubTitle>
+            </ReviewLable>
+          ) : (
+            <ReviewLable htmlFor="input-file">
+              <FontAwesomeIcon icon={faCameraAlt} />
+              <ReviewBtnTitle>사진추가</ReviewBtnTitle>
+              <ReviewBtnSubTitle>최대 1장</ReviewBtnSubTitle>
+            </ReviewLable>
+          )}
+
+          {mode === "edit" ? (
+            <input
+              id="input-file"
+              type="file"
+              accept="img/*"
+              onChange={onImgPostHandler}
+              ref={fileInput}
+              style={{ display: "none" }}
+              disabled="disabled"
+            />
+          ) : (
+            <input
+              id="input-file"
+              type="file"
+              accept="img/*"
+              onChange={onImgPostHandler}
+              ref={fileInput}
+              style={{ display: "none" }}
+            />
+          )}
         </ReviewContainer>
-        {file.length !== 0 ? <ImgBox src={newimage} alt="img" /> : <div></div>}
-        {/* 
-        <ImgBox src={newimage} alt="img" /> */}
+
+        {mode === "edit" ? (
+          <ImgBox src={location.state.detailData?.reviewImgUrl} alt="img" />
+        ) : file.length !== 0 ? (
+          <ImgBox src={newimage} alt="img" />
+        ) : (
+          <div></div>
+        )}
 
         <div>
           {mode === "edit" ? (
             <Textarea
               placeholder="내용을 적어주세요"
               onChange={onReviewContentHandler}
-              value={location.state.detailData.reviewContents}
             />
           ) : (
             <Textarea
@@ -706,7 +1129,9 @@ function Write() {
             />
           )}
         </div>
-        <button>등록하기</button>
+        <BtnContainer>
+          <Button>등록하기</Button>
+        </BtnContainer>
       </form>
     </MainContainer>
   );
@@ -723,4 +1148,25 @@ const ImgBox = styled.img`
   align-items: center;
   margin-bottom: 50px;
   object-fit: cover;
+`;
+
+const BtnContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+`;
+const Button = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20%;
+  height: 50px;
+  background-color: #00cc99;
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  margin-top: 50px;
+  cursor: pointer;
 `;

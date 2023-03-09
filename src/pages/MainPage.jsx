@@ -21,7 +21,7 @@ const MainPage = () => {
     setSelectedTab(e.target.textContent);
   };
 
-  const token = window.localStorage.getItem("accessToken"); //토큰 저장
+  const accessToken = window.localStorage.getItem("accessToken"); //토큰 저장
 
   //로그인 버튼 핸들러
   const onLoginButtonHandler = () => {
@@ -50,7 +50,7 @@ const MainPage = () => {
         </div>
       </TopLogoArea>
       <MyProfileArea>
-        {token === null ? (
+        {accessToken === null ? (
           <div
             style={{
               position: "relative",
