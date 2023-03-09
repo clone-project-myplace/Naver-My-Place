@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { useState } from "react";
@@ -9,8 +9,9 @@ import { useMutation } from "react-query";
 import { deleteReview, likeReview } from "../../api/getDetail";
 import { getDate } from "../../utils/getDate";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import LoadingSpinner from "../LoadingSpinner";
 
-const DetailCard = ({ detailData }) => {
+const DetailCard = ({ detailData, isLoading }) => {
     console.log(detailData);
     const accessToken = window.localStorage.getItem("accessToken");
 
@@ -31,7 +32,7 @@ const DetailCard = ({ detailData }) => {
     );
 
     //likes
-    const { mutate: likeReviewMutate, data: likeReviewData } = useMutation(
+    const { mutate: likeReviewMutate} = useMutation(
         () => likeReview(detailData.reviewId, accessToken),
         {
             onSuccess: () => {
@@ -53,7 +54,9 @@ const DetailCard = ({ detailData }) => {
         }
     }, [detailData]);
 
-    console.log(detailData?.isPushed);
+    if (isLoading) {
+        return <LoadingSpinner />;
+    }
 
     //토큰 디코딩 -> memberName 가져오기
     const parseJwt = (accessToken) => {
@@ -267,20 +270,37 @@ const StCardContentPicture = styled.img`
     margin: 10px;
 `;
 
-const Desc = styled.div``;
+const Desc = styled.div`
+    margin-top: 15px;
+    padding: 0 5px;
+    font-size: 15px;
+    color: #424242;
+    line-height: 2.3rem;
+`;
 
-const Footer = styled.div``;
+const Footer = styled.div`
+    padding: 0 5px;
+    display: inline-block;
+    font-size: 12px;
+    color: #9a9a9a;
+    letter-spacing: -0.2px;
+    vertical-align: top;
+`;
 
 const Tag = styled.div`
     height: 30px;
     margin: 10px 0px;
     display: flex;
+    color: #666;
 `;
 
 const TagButton = styled.div`
-    background-color: #eaeaea;
+    background-color: #f5f7f8;
+
     margin: 0px 3px;
-    border-radius: 2px;
+    padding: 5px 7px;
+    border-radius: 4px;
+    letter-spacing: -1px;
 `;
 
 const ButtonBox = styled.div`
@@ -328,6 +348,8 @@ const PostingInfo = styled.div`
     font-weight: 400;
 
     margin-left: 10px;
+
+    color: #8f8f8f;
 `;
 
 const NickNameInput = styled.div`
