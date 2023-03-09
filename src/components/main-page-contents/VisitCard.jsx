@@ -9,8 +9,7 @@ const VisitCard = ({ item }) => {
   const goToWritePage = (id) => {
     navigate(`/write/create`, {
       state: {
-        visitedRestaurantName: item.visitedRestaurantName,
-        visitedDate: item.visitedDate,
+        item,
       },
     });
   };

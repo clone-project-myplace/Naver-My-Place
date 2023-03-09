@@ -4,6 +4,10 @@ import { naverColorCode } from "../constants/colorCode";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { Container } from "react-bootstrap";
+import { CiUser, CiLock } from "react-icons/ci";
+import LoginSignupButtonStyle from "../styles/LoginSignupButtonStyle";
+
 import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
@@ -25,49 +29,50 @@ const Signup = () => {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit((data) => postSignup(data))}>
-        <LogoStyle>NAVER</LogoStyle>
-        <div>
-          <input
+    <Container>
+      <FormStyle onSubmit={handleSubmit((data) => postSignup(data))}>
+        <LogoStyle style={{ marginBottom: "30px" }}>NAVER</LogoStyle>
+        <IdInput>
+          <CiUser />
+          <InputStyle
             type="text"
             placeholder="아이디"
             {...register("memberId", { required: "아이디를 입력해주세요" })}
           />
-        </div>
-        <div>
-          <input
-            type="password"
-            placeholder="비밀번호"
-            {...register("memberPw", {
-              required: "비밀번호를 입력해주세요",
-            })}
+        </IdInput>
+        <MiddleInput>
+          <CiUser />
+          <InputStyle
+            type="text"
+            placeholder="닉네임"
+            {...register("memberName", { required: "아이디를 입력해주세요" })}
           />
-        </div>
-        <div>
-          <input
+        </MiddleInput>
+        <MiddleInput>
+          <CiUser />
+          <InputStyle
+            type="text"
+            placeholder="비밀번호"
+            {...register("memberPw", { required: "아이디를 입력해주세요" })}
+          />
+        </MiddleInput>
+        <PasswordInput>
+          <CiLock />
+          <InputStyle
             type="password"
             placeholder="비밀번호 확인"
             {...register("memberPwConfirm", {
-              required: "비밀번호 확인을 입력해주세요",
+              required: "비밀번호를 입력해주세요",
             })}
           />
-        </div>
+        </PasswordInput>
         <div>
-          <input
-            type="text"
-            placeholder="닉네임"
-            {...register("memberName", {
-              required: "닉네임을 입력해주세요",
-            })}
-          />
+          <LoginSignupButtonStyle type="submit" style={{ marginTop: "30px" }}>
+            로그인
+          </LoginSignupButtonStyle>
         </div>
-        <div>
-          <input type="submit" />
-        </div>
-      </form>
-      <LoadingSpinner />
-    </div>
+      </FormStyle>
+    </Container>
   );
 };
 
@@ -77,4 +82,49 @@ const LogoStyle = styled.div`
   color: ${naverColorCode};
   font-size: 30px;
   font-weight: 900;
+`;
+
+const FormStyle = styled.form`
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  text-align: center;
+  padding: 20px;
+`;
+
+const IdInput = styled.div`
+  border: 1px solid gray;
+  width: 70vw;
+  padding: 10px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+`;
+
+const PasswordInput = styled.div`
+  border-bottom: 1px solid gray;
+  border-left: 1px solid gray;
+  border-right: 1px solid gray;
+  width: 70vw;
+  padding: 10px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+`;
+
+const InputStyle = styled.input`
+  border: none;
+  width: 95%;
+  margin-left: 10px;
+  background-color: rgb(249, 249, 249);
+
+  :focus {
+    outline: none;
+  }
+`;
+
+const MiddleInput = styled.div`
+  border-bottom: 1px solid gray;
+  border-left: 1px solid gray;
+  border-right: 1px solid gray;
+  width: 70vw;
+  padding: 10px;
 `;

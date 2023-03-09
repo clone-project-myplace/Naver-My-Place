@@ -40,8 +40,9 @@ function Write() {
   }
 
   if (mode === "create") {
+    // console.log("create : ", location.state.visitedRestaurantId);
     // console.log("location.state", location.state);
-    // console.log("location.state.", location.state.visitedRestaurantName);
+    // console.log("location.stateFFFFFF.", location.state.visitedRestaurantName);
     // console.log("params", mode);
   }
 
@@ -371,13 +372,7 @@ function Write() {
   const queryClient = useQueryClient();
   const mutation = useMutation(uploadPost2, {
     onSuccess: () => {
-      // queryClient.invalidateQueries("reviews");
-    },
-  });
-
-  const mutation2 = useMutation(uploadPost, {
-    onSuccess: () => {
-      // queryClient.invalidateQueries("reviews");
+      queryClient.invalidateQueries("getReview");
     },
   });
 
@@ -411,19 +406,26 @@ function Write() {
   };
   const formData = new FormData();
 
+  console.log("TARGET", location.state?.visitedRestaurantId);
   const accessToken = window.localStorage.getItem("accessToken");
   const mutationCreate = useMutation(() =>
-    createReview(location.state.visitedRestaurantId, formData, accessToken)
+    createReview(location.state.item.visitedRestaurantId, formData, accessToken)
   );
 
-  const mutationUpdate = useMutation(() =>
-    updateReview(location.state.detailData.reviewId, formData, accessToken)
+  const mutationUpdate = useMutation(
+    () =>
+      updateReview(location.state.detailData.reviewId, formData, accessToken),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("getReview");
+      },
+    }
   );
 
   const onSubmitPostHandler = async (event) => {
     if (mode === "create") {
       event.preventDefault();
-      const restaurantId = location.state.visitedRestaurantId;
+      const restaurantId = location.state.item.visitedRestaurantId;
       // console.log("restaurantId", restaurantId);
 
       formData.append("reviewKeywordList", Arr);
@@ -434,7 +436,7 @@ function Write() {
       mutationCreate.mutate(restaurantId, formData);
 
       // TODO : navigate위치 작성하기
-      // navigate("/review/detail/" + location.state.visitedRestaurantId);
+      navigate("/");
     } else {
       event.preventDefault();
       console.log("수정하기 클릭");
@@ -448,7 +450,7 @@ function Write() {
 
       mutationUpdate.mutate(reviewId, formData);
 
-      navigate("/review/detail/" + reviewId);
+      navigate("/detail/" + reviewId);
     }
   };
   // console.log("Arr", Arr);

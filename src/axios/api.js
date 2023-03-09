@@ -31,5 +31,3 @@ const uploadPost2 = async (formData) => {
 };
 
 export { uploadPost2 };
-
-

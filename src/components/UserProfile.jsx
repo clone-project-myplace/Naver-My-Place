@@ -8,7 +8,8 @@ import { useEffect } from "react";
 import { useQuery } from "react-query";
 import axios from "axios";
 
-const UserProfile = ({ editable, profileImg }) => {
+const UserProfile = ({ editable, profileImg, reviewCountt }) => {
+  console.log(reviewCountt);
   const navigate = useNavigate();
   const accessToken = window.localStorage.getItem("accessToken");
 
@@ -20,8 +21,9 @@ const UserProfile = ({ editable, profileImg }) => {
     });
   });
 
-  const currentNickname = data.data.data.memberName;
-  const currentImgUrl = data.data.data.profileImgUrl;
+  const currentNickname = data?.data.data.memberName;
+  const currentImgUrl = data?.data.data.profileImgUrl;
+  const reviewCount = data?.data.data.reviewCount;
 
   const goToEditPage = () => {
     const config = {
@@ -54,7 +56,7 @@ const UserProfile = ({ editable, profileImg }) => {
         </EditPencilArea>
         <div style={{ position: "relative", top: "5px" }}>
           <div align="left">{currentNickname}</div>
-          <div align="left">사진리뷰 40 3.2 목</div>
+          <div align="left">사진리뷰 </div>
         </div>
       </div>
     );
@@ -65,7 +67,7 @@ const UserProfile = ({ editable, profileImg }) => {
       {/* src에 이미지 경로 */}
       <div>
         <NickNameInput>닉네임</NickNameInput>
-        <PostingInfo>사진리뷰 40 3.2 목</PostingInfo>
+        <PostingInfo>사진리뷰 {reviewCountt}</PostingInfo>
       </div>
     </ProfileArea>
   );

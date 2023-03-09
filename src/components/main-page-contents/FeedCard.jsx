@@ -15,12 +15,16 @@ const FeedCard = ({ item }) => {
     navigate(`/detail/${id}`);
   };
 
+  console.log("item : ", item.reviewCount);
   return (
     <div>
       <FeedBox onClick={() => goToDatailPage(item.reviewId)}>
         <OuterBox>
           <ProfileBox>
-            <UserProfile profileImg={item.profileImgUrl} />
+            <UserProfile
+              profileImg={item.profileImgUrl}
+              reviewCountt={item?.reviewCount}
+            />
           </ProfileBox>
           <div style={{ display: "flex" }}>
             <LikesButton
