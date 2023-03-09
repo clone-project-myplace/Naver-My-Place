@@ -100,7 +100,7 @@ const UserProfileEdit = () => {
               />
             </NicknameArea>
           </form>
-          <button onClick={backToHome}>닫기</button>
+          <LogoutButton onClick={backToHome}>닫기</LogoutButton>
           <LogoutButton onClick={logoutHandler}>로그아웃</LogoutButton>
         </Container>
       </div>
