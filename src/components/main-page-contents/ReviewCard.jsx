@@ -12,7 +12,7 @@ const ReviewCard = ({ item }) => {
       },
     });
   };
-  console.log(item);
+
   return (
     <div onClick={goToDetailPage}>
       <Picture>

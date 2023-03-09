@@ -13,14 +13,13 @@ const FeedCard = ({ item }) => {
   const goToDatailPage = (id) => {
     navigate(`/detail/${id}`);
   };
-  console.log(item);
 
   return (
     <div>
       <FeedBox onClick={() => goToDatailPage(item.reviewId)}>
         <OuterBox>
           <ProfileBox>
-            <UserProfile />
+            <UserProfile profileImg={item.profileImgUrl} />
           </ProfileBox>
           <BsThreeDotsVerticalStyle>
             <BsThreeDotsVertical />
@@ -112,7 +111,7 @@ const TagButton = styled.div`
 const Rest = styled.div`
   border-radius: 10px;
   padding: 10px;
-  border: 1px solid ${subTitleColorCode};
+  border: 1px solid rgb(0, 0, 0, 0.2);
 `;
 
 const RestName = styled.div`
@@ -120,5 +119,5 @@ const RestName = styled.div`
 `;
 const RestLocation = styled.div`
   color: gray;
-  font-weight: 300;
+  font-weight: 400;
 `;

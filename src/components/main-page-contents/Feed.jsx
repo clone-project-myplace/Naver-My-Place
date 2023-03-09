@@ -14,6 +14,15 @@ const Feed = () => {
   const [loading, setLoading] = useState(false); //로딩 성공, 실패를 담을 state
   const firstPrevent = false;
 
+  // const fetchPins = async (page) => {
+  //   axios
+  //     .get(`${process.env.REACT_APP_BASEURL}/api/reviews?page=${page}`)
+  //     .then((res) => {
+  //       setDataList((prev) => [...prev, ...res.data.data.reviewList]);
+  //     });
+  //   setLoading(true);
+  // };
+
   const fetchPins = async (page) => {
     axios
       .get(`${process.env.REACT_APP_BASEURL}/api/reviews?page=${page}`)
@@ -25,6 +34,7 @@ const Feed = () => {
 
   const loadMore = () => {
     setPage((prev) => prev + 1);
+    console.log(page);
   };
 
   useEffect(() => {
@@ -33,6 +43,7 @@ const Feed = () => {
 
   useEffect(() => {
     if (loading) {
+      console.log(loading);
       //로딩되었을 때만 실행
       const observer = new IntersectionObserver(
         (entries) => {

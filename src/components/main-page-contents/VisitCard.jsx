@@ -23,9 +23,7 @@ const VisitCard = ({ item }) => {
       <Reservation>{item.visitedRestaurantName} 예약</Reservation>
 
       {item.isReviewed ? (
-        <ReviewPostButton>
-          <BsFillPencilFill color={naverColorCode} /> 리뷰 작성 완료
-        </ReviewPostButton>
+        <ReviewPostButton>리뷰 작성 완료</ReviewPostButton>
       ) : (
         <ReviewPostButton onClick={goToWritePage}>
           <BsFillPencilFill color={naverColorCode} /> 리뷰 쓰기

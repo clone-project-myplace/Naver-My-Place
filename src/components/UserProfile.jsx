@@ -2,78 +2,45 @@ import styled from "styled-components";
 import defaultProfileImg from "../assets/default_profile.jpeg";
 import { HiPencil } from "react-icons/hi";
 import { subTitleColorCode } from "../constants/colorCode";
-import ReactModal from "react-modal";
-import { useCallback, useRef, useState } from "react";
-import { Container } from "react-bootstrap";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Container } from "react-bootstrap";
 
-const UserProfile = ({ editable }) => {
+const UserProfile = ({ editable, profileImg }) => {
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
-  const inputRef = useRef(null);
-  const editModalOnHandler = () => {
-    setIsOpen(true);
-  };
-  const onUploadImage = useCallback((e) => {
-    if (!e.target.files) {
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("image", e.target.files[0]);
-
-    axios({
-      baseURL: "",
-      url: "/images/:username/thumbnail",
-      method: "POST",
-      data: formData,
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    })
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
 
   const goToEditPage = () => {
     navigate("/myprofile");
   };
-  const onUploadImageButtonClick = useCallback(() => {
-    if (!inputRef.current) {
-      return;
-    }
-    inputRef.current.click();
-  }, []);
 
   if (editable) {
     return (
-      <div>
-        <ProfileAreatop>
-          <img
-            style={ProfileImg}
-            src={defaultProfileImg}
-            alt="profile image"
-            onClick={goToEditPage}
-          />
-          <EditPencilArea onClick={goToEditPage}>
-            <HiPencil />
-          </EditPencilArea>
-          <div>
-            <Nickname>닉네임</Nickname>
-            <PostingInfo>사진리뷰 40 3.2 목</PostingInfo>
-          </div>
-        </ProfileAreatop>
+      <div
+        style={{
+          display: "flex",
+          position: "relative",
+          left: "42%",
+          cursor: "pointer",
+        }}
+      >
+        <img
+          style={ProfileImg}
+          src={defaultProfileImg}
+          alt="profile image"
+          onClick={goToEditPage}
+        />
+        <EditPencilArea onClick={goToEditPage}>
+          <HiPencil />
+        </EditPencilArea>
+        <div style={{ position: "relative", top: "5px" }}>
+          <div align="left">닉네임</div>
+          <div align="left">사진리뷰 40 3.2 목</div>
+        </div>
       </div>
     );
   }
   return (
     <ProfileArea>
-      <img style={ProfileImg} src={defaultProfileImg} alt="profile image" />
+      <img style={ProfileImg} src={profileImg} alt="profile image" />
       {/* src에 이미지 경로 */}
       <div>
         <NickNameInput>닉네임</NickNameInput>
@@ -114,7 +81,7 @@ const EditPencilArea = styled.div`
   background-color: gray;
   position: relative;
   right: 20px;
-  top: 15px;
+  top: 38px;
   border-radius: 70%;
   overflow: hidden;
   width: 20px;
