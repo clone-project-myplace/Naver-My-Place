@@ -5,6 +5,7 @@ import MainPage from "./MainPage";
 import Signup from "./Signup";
 import Detail from "../pages/Detail";
 import Write from "./Write";
+import UserProfileEdit from "./UserProfileEdit";
 
 const Router = () => {
   return (
@@ -15,6 +16,7 @@ const Router = () => {
         <Route path="/" element={<MainPage />} />
         <Route path="/detail/:id" element={<Detail />} />
         <Route path="/write/:mode" element={<Write />} />
+        <Route path="/myprofile" element={<UserProfileEdit />} />
       </Routes>
     </BrowserRouter>
   );
