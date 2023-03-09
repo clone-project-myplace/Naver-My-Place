@@ -11,7 +11,10 @@ const Signup = () => {
   const { register, handleSubmit } = useForm();
 
   const postSignup = (data) => {
-    console.log(data);
+    if (data.memberPw !== data.memberPwConfirm) {
+      alert("비밀번호가 일치하지 않습니다");
+      return;
+    }
     axios
       .post(`${process.env.REACT_APP_BASEURL}/api/members/signup`, data)
       .then((res) => {
@@ -38,6 +41,15 @@ const Signup = () => {
             placeholder="비밀번호"
             {...register("memberPw", {
               required: "비밀번호를 입력해주세요",
+            })}
+          />
+        </div>
+        <div>
+          <input
+            type="password"
+            placeholder="비밀번호 확인"
+            {...register("memberPwConfirm", {
+              required: "비밀번호 확인을 입력해주세요",
             })}
           />
         </div>
