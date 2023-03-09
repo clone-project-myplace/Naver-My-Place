@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
 
-import counterSlice from "./reducers/counterSlice";
 import tabModeSlice from "./reducers/tabModeSlice";
+import loginProfileImgSlice from "./reducers/loginProfileImgSlice";
 
-const rootReducer = { counterSlice, tabModeSlice };
+const rootReducer = { tabModeSlice, loginProfileImgSlice };
 const store = configureStore({ reducer: rootReducer });
 
 export default store;

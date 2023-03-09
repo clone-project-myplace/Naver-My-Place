@@ -8,10 +8,13 @@ import {
 } from "../constants/colorCode";
 import { useNavigate } from "react-router-dom";
 import { Container } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
 const UserProfile = ({ editable, profileImg }) => {
   const navigate = useNavigate();
-
+  const loginProfileImgUrl = useSelector(
+    (state) => state.loginProfileImgSlice.url
+  );
   const goToEditPage = () => {
     navigate("/myprofile");
   };
@@ -28,7 +31,7 @@ const UserProfile = ({ editable, profileImg }) => {
       >
         <img
           style={ProfileImg}
-          src={defaultProfileImg}
+          src={loginProfileImgUrl}
           alt="profile image"
           onClick={goToEditPage}
         />
