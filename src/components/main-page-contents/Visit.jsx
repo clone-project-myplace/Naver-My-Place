@@ -5,10 +5,11 @@ import LoadingSpinner from "../LoadingSpinner";
 import styled from "styled-components";
 import { Container } from "react-bootstrap";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Visit = () => {
+  const navigate = useNavigate();
   const accessToken = window.localStorage.getItem("accessToken");
-  console.log(accessToken);
   const config = {
     headers: {
       Authorization: accessToken,
@@ -31,6 +32,47 @@ const Visit = () => {
   }
 
   const visitList = data.data.data;
+
+  //비로그인 상태일 때 처리
+  const goToLoginPage = () => {
+    navigate("/login");
+  };
+  if (!accessToken) {
+    return (
+      <Container style={{ margin: "50px" }}>
+        <div class="card text-center">
+          <div class="card-header">로그아웃 상태입니다.</div>
+          <div class="card-body">
+            <h5 class="card-title">로그인하고 여러분의 후기를 들려주세요</h5>
+            <p class="card-text"></p>
+            <div class="btn btn-primary" onClick={goToLoginPage}>
+              로그인
+            </div>
+          </div>
+          <div class="card-footer text-muted">MY 플레이스</div>
+        </div>
+      </Container>
+    );
+  }
+
+  // 방문한 곳이 없을때 처리
+  if (visitList?.length == 0) {
+    return (
+      <Container style={{ margin: "50px" }}>
+        <div class="card text-center">
+          <div class="card-header">방문한 곳이 없습니다.</div>
+          <div class="card-body">
+            <h5 class="card-title">여러분의 후기를 들려주세요</h5>
+            <p class="card-text"></p>
+            <a href="#" class="btn btn-primary">
+              방문하러가기
+            </a>
+          </div>
+          <div class="card-footer text-muted">MY 플레이스</div>
+        </div>
+      </Container>
+    );
+  }
 
   return (
     <Container>

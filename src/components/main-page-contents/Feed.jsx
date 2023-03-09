@@ -68,13 +68,15 @@ const Feed = () => {
 
       {page === 0 ? (
         <LoadMore
-          style={{ position: "absolute", bottom: "-50px" }}
+          style={{ position: "absolute", bottom: "-5600px", opacity: "0" }}
           ref={pageEnd}
         >
-          This is End
+          Load More
         </LoadMore>
       ) : (
-        <LoadMore ref={pageEnd}>This is End</LoadMore>
+        <LoadMore style={{ opacity: "0" }} ref={pageEnd}>
+          This is End
+        </LoadMore>
       )}
       {/* <LoadMore style={{ position: "absolute", bottom: "-50px" }} ref={pageEnd}>
         This is End
