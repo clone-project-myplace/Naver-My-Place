@@ -56,7 +56,10 @@ const Login = () => {
             로그인
           </LoginSignupButtonStyle>
         </div>{" "}
-        <LoginSignupButtonStyle onClick={goToSignup}>
+        <LoginSignupButtonStyle
+          onClick={goToSignup}
+          style={{ marginTop: "30px" }}
+        >
           회원가입
         </LoginSignupButtonStyle>
       </FormStyle>
