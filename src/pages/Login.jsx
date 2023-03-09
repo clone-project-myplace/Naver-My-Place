@@ -18,19 +18,17 @@ const Login = () => {
 
   const postLogin = (data) => {
     const userInfo = { memberId: data.memberId, memberPw: data.memberPw };
-    console.log(userInfo);
     axios
       .post(`${process.env.REACT_APP_BASEURL}/api/members/login`, data)
       .then((res) => {
         window.localStorage.setItem("accessToken", res.headers.authorization);
-        console.log("res.headers.authorization : ", res.headers.authorization);
         navigate("/");
       })
       .catch((err) => console.log(err));
   };
   return (
     <Container>
-      <form onSubmit={handleSubmit((data) => postLogin(data))}>
+      <FormStyle onSubmit={handleSubmit((data) => postLogin(data))}>
         <LogoStyle>NAVER</LogoStyle>
         <IdInput>
           <CiUser />
@@ -53,12 +51,19 @@ const Login = () => {
         <div>
           <LoginSignupButtonStyle type="submit">로그인</LoginSignupButtonStyle>
         </div>
-      </form>
+      </FormStyle>
     </Container>
   );
 };
 
 export default Login;
+
+const FormStyle = styled.form`
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  padding: 20px;
+`;
 
 const LogoStyle = styled.div`
   color: ${naverColorCode};
