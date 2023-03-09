@@ -1,20 +1,18 @@
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
-
 import defaultProfileImg from "../assets/default_profile.jpeg";
 import { HiPencil } from "react-icons/hi";
-import { naverColorCode, subTitleColorCode } from "../constants/colorCode";
-
-import { Container } from "react-bootstrap";
-
 import { useMutation } from "react-query";
-import { uploadProfile } from "../axios/api";
 import { useNavigate } from "react-router-dom";
 
 import { Navbar } from "react-bootstrap";
 import { HiArrowLeft } from "react-icons/hi2";
+import { uploadProfile } from "../api/getDetail";
 
 const UserProfileEdit = () => {
+
+    const accessToken = window.localStorage.getItem("accessToken");
+
     const [newimage, setNewImage] = useState("");
     const [file, setFile] = useState("");
 
@@ -44,14 +42,15 @@ const UserProfileEdit = () => {
         fileInput.current.click();
     };
 
-    const mutation = useMutation(uploadProfile);
+    const mutation = useMutation(() => uploadProfile(formData,accessToken));
+
+
+    const formData = new FormData();
 
     const onSubmitPostHandler = async (event) => {
         event.preventDefault();
 
-        console.log(1111);
-
-        const formData = new FormData();
+   
 
         formData.append("imgUrl", file);
 
