@@ -3,15 +3,14 @@ import styled from "styled-components";
 
 import defaultProfileImg from "../assets/default_profile.jpeg";
 import { HiPencil } from "react-icons/hi";
-import { subTitleColorCode } from "../constants/colorCode";
-
-import { Container } from "react-bootstrap";
-
 import { useMutation } from "react-query";
 import { uploadProfile } from "../axios/api";
 
+import { Navbar} from "react-bootstrap";
+import { HiArrowLeft } from "react-icons/hi2";
+import { useNavigate } from "react-router-dom";
+
 const UserProfileEdit = () => {
-    // console.log("files", file);
 
     const [newimage, setNewImage] = useState("");
     const [file, setFile] = useState("");
@@ -35,20 +34,19 @@ const UserProfileEdit = () => {
         }
     };
 
-    const fileInput = useRef(null);
+    const fileInput = useRef();
+
     const onImgButton = (event) => {
         event.preventDefault();
         fileInput.current.click();
     };
 
-    const mutation = useMutation(uploadProfile, {
-        onSuccess: () => {
-            // queryClient.invalidateQueries("reviews");
-        },
-    });
+    const mutation = useMutation(uploadProfile);
 
     const onSubmitPostHandler = async (event) => {
         event.preventDefault();
+
+        console.log(1111);
 
         const formData = new FormData();
 
@@ -58,54 +56,87 @@ const UserProfileEdit = () => {
         alert("업로드 완료!");
     };
 
+    const navigate = useNavigate();
+
+    const navToHome = () => {
+        navigate("/");
+    };
+
+    const handleOnClickLogOutBtn = () => {
+        localStorage.removeItem("accessToken");
+        alert("로그아웃!");
+        window.location.replace("/");
+    }
+
     return (
         <>
             <div>
-                <ProfileArea>
-                    <img
-                        style={ProfileImg}
-                        src={defaultProfileImg}
-                        alt='profile image'
-                    />
-                    <EditPencilArea>
-                        <HiPencil />
-                    </EditPencilArea>
-                    <div>
-                        <Nickname>닉네임</Nickname>
-                        <PostingInfo>사진리뷰 40 3.2 목</PostingInfo>
-                    </div>
-                </ProfileArea>
-
-                <Container>
+                <Navbar
+                    expand='lg'
+                    sticky='top'
+                    style={{
+                        display: "flex",
+                    }}
+                >
+                    <Navbar.Brand
+                        onClick={navToHome}
+                        style={{ cursor: "pointer" }}
+                    >
+                        <HiArrowLeft size={34} />
+                    </Navbar.Brand>
+                    <Title>프로필 설정</Title>
+                </Navbar>
+                <ProfileLayout>
                     <form
                         encType='multipart/form-data'
                         onSubmit={onSubmitPostHandler}
                     >
+                        <ProfileArea>
+                            <StButton onClick={onImgButton}>
+                                <img
+                                    style={ProfileImg}
+                                    src={defaultProfileImg}
+                                    alt='profile image'
+                                />
+                            </StButton>
+                            <EditPencilArea>
+                                <HiPencil />
+                            </EditPencilArea>
+                        </ProfileArea>
                         <input
                             type='file'
                             accept='img/*'
                             onChange={onImgPostHandler}
                             ref={fileInput}
+                            style={{ display: "none" }}
                         />
-                        <button>이미지 업로드</button>
                         <NicknameArea>
-                            <div>닉네임</div>
+                            <Label>닉네임</Label>
                             <input type='text' />
-                            <div>소개</div>
+                            <Label>소개</Label>
                             <textarea
                                 type='text'
                                 placeholder='예. 분당구  빵집 & 케이크 맛집 탐험가'
                             />
                         </NicknameArea>
+                        <StyledButton background="#00b49b" color="#fff">저장하기</StyledButton>
                     </form>
-                    <button>닫기</button>
-                </Container>
+                        <StyledButton 
+                        onClick={handleOnClickLogOutBtn}
+                        color="#342e2e"
+                        >로그아웃</StyledButton>
+                </ProfileLayout>
             </div>
         </>
     );
 };
 
 export default UserProfileEdit;
+
+const ProfileLayout = styled.div`
+    max-width: 720px;
+    margin: 0 auto;
+`;
 
 const ProfileImg = {
     padding: "2px",
@@ -116,17 +147,20 @@ const ProfileImg = {
 
 const ProfileArea = styled.div`
     display: flex;
+    justify-content: center;
+    margin-top: 30px;
 `;
 
-const Nickname = styled.div`
-    font-weight: 800;
-    margin-left: 10px;
+const Title = styled.div`
+    font-weight: bold;
+    font-size: 20px;
+
 `;
 
-const PostingInfo = styled.div`
-    font-weight: 400;
-    color: ${subTitleColorCode};
-    margin-left: 10px;
+const Label = styled.div`
+    color: #8f8f8f;
+    display: block;
+    font-weight: ${(props) => props.fontWeight};
 `;
 
 const EditPencilArea = styled.div`
@@ -145,15 +179,46 @@ const EditPencilArea = styled.div`
 
 const NicknameArea = styled.div`
     input {
-        background-color: gray;
-        border: 1px solid yellow;
-        padding: 10px;
+        box-sizing: border-box;
+        height: 46px;
         width: 100%;
+        outline: none;
+        border-radius: 8px;
+        padding: 0 12px;
+        font-size: 14px;
+        border: 1px solid #eee;
     }
     textarea {
         width: 100%;
-        padding: 10px;
+        border: 1px solid #eee;
+        box-sizing: border-box;
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 14px;
+        margin-bottom: 20px;
     }
 `;
 
-const NickNameInput = styled.div``;
+const StButton = styled.div`
+    border: none;
+    cursor: pointer;
+`;
+
+const StyledButton = styled.button`
+margin-bottom: 10px;
+    width: 100%;
+    height: 50px;
+    border-radius: 10px;
+    border: none;
+    background: ${(props) => props.background};
+    font-size: 20px;
+    font-weight: 700;
+    color: ${(props) => props.color};
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    cursor: pointer;
+`;
+
