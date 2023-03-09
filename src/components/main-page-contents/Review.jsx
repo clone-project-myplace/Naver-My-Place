@@ -10,7 +10,9 @@ import ReviewCard from "./ReviewCard";
 const Review = () => {
   const navigate = useNavigate();
   const accessToken = window.localStorage.getItem("accessToken");
-  const config = { Authorization: `JWT ${accessToken}` };
+  const config = {
+    headers: { Authorization: accessToken },
+  };
   const { isLoading, isError, error, data } = useQuery(
     ["get-review-data"],
     () => {
@@ -74,21 +76,11 @@ const Review = () => {
     <Container style={{ display: "flex", justifyContent: "center" }}>
       <ReviewArea>
         <Row className="justify-content-md-center">
-          <Col xs lg="3" style={{ margin: "20px" }}>
-            <ReviewCard />
-          </Col>
-          <Col xs lg="3" style={{ margin: "20px" }}>
-            <ReviewCard />
-          </Col>
-          <Col xs lg="3" style={{ margin: "20px" }}>
-            <ReviewCard />
-          </Col>
-          <Col xs lg="3" style={{ margin: "20px" }}>
-            <ReviewCard />
-          </Col>
-          <Col xs lg="3" style={{ margin: "20px" }}>
-            <ReviewCard />
-          </Col>
+          {reviewList.map((item) => (
+            <Col xs lg="3" style={{ margin: "20px" }}>
+              <ReviewCard item={item} />
+            </Col>
+          ))}
         </Row>{" "}
       </ReviewArea>
     </Container>
@@ -101,7 +93,7 @@ const ReviewArea = styled.div`
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   margin: 50px 0px 50px 0px;
-  background-color: #eaeaea;
+  background-color: #fff;
   padding: 50px;
   display: flex;
   width: 800px;
