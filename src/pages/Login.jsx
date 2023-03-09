@@ -16,6 +16,9 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
+  const goToSignup = () => {
+    navigate("/signup");
+  };
   const postLogin = (data) => {
     const userInfo = { memberId: data.memberId, memberPw: data.memberPw };
     axios
@@ -52,7 +55,10 @@ const Login = () => {
           <LoginSignupButtonStyle type="submit" style={{ marginTop: "30px" }}>
             로그인
           </LoginSignupButtonStyle>
-        </div>
+        </div>{" "}
+        <LoginSignupButtonStyle onClick={goToSignup}>
+          회원가입
+        </LoginSignupButtonStyle>
       </FormStyle>
     </Container>
   );
