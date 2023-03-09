@@ -31,9 +31,6 @@ const FeedCard = ({ item }) => {
               <AiOutlineHeart size={30} />
               {item.likeCount}
             </LikesButton>
-            <BsThreeDotsVerticalStyle>
-              <BsThreeDotsVertical />
-            </BsThreeDotsVerticalStyle>
           </div>
         </OuterBox>
         <ImgBox url={item.reviewImgUrl}>

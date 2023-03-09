@@ -29,7 +29,7 @@ const Login = () => {
   return (
     <Container>
       <FormStyle onSubmit={handleSubmit((data) => postLogin(data))}>
-        <LogoStyle>NAVER</LogoStyle>
+        <LogoStyle style={{ marginBottom: "30px" }}>NAVER</LogoStyle>
         <IdInput>
           <CiUser />
           <InputStyle
@@ -49,7 +49,9 @@ const Login = () => {
           />
         </PasswordInput>
         <div>
-          <LoginSignupButtonStyle type="submit">로그인</LoginSignupButtonStyle>
+          <LoginSignupButtonStyle type="submit" style={{ marginTop: "30px" }}>
+            로그인
+          </LoginSignupButtonStyle>
         </div>
       </FormStyle>
     </Container>
@@ -61,6 +63,7 @@ export default Login;
 const FormStyle = styled.form`
   display: flex;
   flex-direction: column;
+  width: 80%;
   text-align: center;
   padding: 20px;
 `;
@@ -93,6 +96,7 @@ const InputStyle = styled.input`
   border: none;
   width: 95%;
   margin-left: 10px;
+  background-color: rgb(249, 249, 249);
 
   :focus {
     outline: none;

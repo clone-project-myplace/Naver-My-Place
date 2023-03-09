@@ -5,21 +5,29 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import jwt_decode from "jwt-decode";
 import { useEffect } from "react";
+import { useQuery } from "react-query";
+import axios from "axios";
 
 const UserProfile = ({ editable, profileImg }) => {
   const navigate = useNavigate();
-  const loginProfileImgUrl = useSelector((state) => {
-    return state.loginProfileImgSlice.url;
-  });
   const accessToken = window.localStorage.getItem("accessToken");
-  const decoded = accessToken ? jwt_decode(accessToken) : "";
-  const loginedUserNickname = decoded.sub;
+
+  const { data } = useQuery(["getProfileInfo"], () => {
+    return axios.get(`${process.env.REACT_APP_BASEURL}/api/members/info`, {
+      headers: {
+        Authorization: accessToken,
+      },
+    });
+  });
+
+  const currentNickname = data.data.data.memberName;
+  const currentImgUrl = data.data.data.profileImgUrl;
 
   const goToEditPage = () => {
     const config = {
       state: {
-        currentNickname: loginedUserNickname,
-        currentImgUrl: loginProfileImgUrl,
+        currentNickname,
+        currentImgUrl,
       },
     };
     navigate("/myprofile", config);
@@ -37,7 +45,7 @@ const UserProfile = ({ editable, profileImg }) => {
       >
         <img
           style={ProfileImg}
-          src={loginProfileImgUrl}
+          src={currentImgUrl}
           alt="profile image"
           onClick={goToEditPage}
         />
@@ -45,7 +53,7 @@ const UserProfile = ({ editable, profileImg }) => {
           <HiPencil color={navbarColorCode} />
         </EditPencilArea>
         <div style={{ position: "relative", top: "5px" }}>
-          <div align="left">{loginedUserNickname}</div>
+          <div align="left">{currentNickname}</div>
           <div align="left">사진리뷰 40 3.2 목</div>
         </div>
       </div>
