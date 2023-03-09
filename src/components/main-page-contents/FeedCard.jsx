@@ -7,131 +7,133 @@ import { FaHeart, FaRegHeart } from "react-icons/fa";
 import defaultProfileImg from "../../assets/default_profile.jpeg";
 import UserProfile from "../UserProfile";
 import { subTitleColorCode } from "../../constants/colorCode";
+import { AiOutlineHeart} from "react-icons/ai";
 
 const FeedCard = ({ item }) => {
-  const navigate = useNavigate();
-  const goToDatailPage = (id) => {
-    navigate(`/detail/${id}`);
-  };
-  console.log(item);
+    const navigate = useNavigate();
+    const goToDatailPage = (id) => {
+        navigate(`/detail/${id}`);
+    };
+    console.log(item);
 
-  return (
-    <div>
-      <FeedBox onClick={() => goToDatailPage(item.reviewId)}>
-        <OuterBox>
-          <ProfileBox>
-            <UserProfile />
-          </ProfileBox>
-          <BsThreeDotsVerticalStyle>
-            <BsThreeDotsVertical />
-          </BsThreeDotsVerticalStyle>
-        </OuterBox>
-        <ImgBox url={item.reviewImgUrl}>
-          <LocationBox>
-            <BiMap />
-            {item.restaurantAddress}
-          </LocationBox>
-        </ImgBox>
-        <Desc>{item.reviewContents}</Desc>
-        <Tag>
-          <TagButton>{item.keywordList[0]}</TagButton>
-          <TagButton>+{item.keywordList.length - 1}</TagButton>
-        </Tag>
-        <Rest>
-          <RestName>{item.restaurantName} &gt;</RestName>
-          <RestLocation>{item.restaurantAddress}</RestLocation>
-        </Rest>
-        <button class="sc-gUjXxn coXQBz">
-          <svg
-            stroke="currentColor"
-            fill="currentColor"
-            stroke-width="0"
-            viewBox="0 0 1024 1024"
-            height="30"
-            width="30"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M923 283.6a260.04 260.04 0 0 0-56.9-82.8 264.4 264.4 0 0 0-84-55.5A265.34 265.34 0 0 0 679.7 125c-49.3 0-97.4 13.5-139.2 39-10 6.1-19.5 12.8-28.5 20.1-9-7.3-18.5-14-28.5-20.1-41.8-25.5-89.9-39-139.2-39-35.5 0-69.9 6.8-102.4 20.3-31.4 13-59.7 31.7-84 55.5a258.44 258.44 0 0 0-56.9 82.8c-13.9 32.3-21 66.6-21 101.9 0 33.3 6.8 68 20.3 103.3 11.3 29.5 27.5 60.1 48.2 91 32.8 48.9 77.9 99.9 133.9 151.6 92.8 85.7 184.7 144.9 188.6 147.3l23.7 15.2c10.5 6.7 24 6.7 34.5 0l23.7-15.2c3.9-2.5 95.7-61.6 188.6-147.3 56-51.7 101.1-102.7 133.9-151.6 20.7-30.9 37-61.5 48.2-91 13.5-35.3 20.3-70 20.3-103.3.1-35.3-7-69.6-20.9-101.9zM512 814.8S156 586.7 156 385.5C156 283.6 240.3 201 344.3 201c73.1 0 136.5 40.8 167.7 100.4C543.2 241.8 606.6 201 679.7 201c104 0 188.3 82.6 188.3 184.5 0 201.2-356 429.3-356 429.3z"></path>
-          </svg>
-          {item.likeCount}
-        </button>
-      </FeedBox>
-    </div>
-  );
+    return (
+        <div>
+            <FeedBox onClick={() => goToDatailPage(item.reviewId)}>
+                <OuterBox>
+                    <ProfileBox>
+                        <UserProfile />
+                    </ProfileBox>
+                    <div style={{ display: "flex" }}>
+                        <LikesButton
+                            onClick={(e) => {
+                                e.stopPropagation();
+                            }}
+                        >
+                            <AiOutlineHeart size={30} />
+                            {item.likeCount}
+                        </LikesButton>
+                        <BsThreeDotsVerticalStyle>
+                            <BsThreeDotsVertical />
+                        </BsThreeDotsVerticalStyle>
+                    </div>
+                </OuterBox>
+                <ImgBox url={item.reviewImgUrl}>
+                    <LocationBox>
+                        <BiMap />
+                        {item.restaurantAddress}
+                    </LocationBox>
+                </ImgBox>
+                <Desc>{item.reviewContents}</Desc>
+                <Tag>
+                    <TagButton>{item.keywordList[0]}</TagButton>
+                    <TagButton>+{item.keywordList.length - 1}</TagButton>
+                </Tag>
+                <Rest>
+                    <RestName>{item.restaurantName} &gt;</RestName>
+                    <RestLocation>{item.restaurantAddress}</RestLocation>
+                </Rest>
+            </FeedBox>
+        </div>
+    );
 };
 
 export default FeedCard;
 
 const FeedBox = styled.div`
-  margin: 0 auto;
-  height: 560px;
-  width: 700px;
-  padding: 10px;
-  margin-top: 20px;
+    margin: 0 auto;
+    height: 560px;
+    width: 700px;
+    padding: 10px;
+    margin-top: 20px;
 `;
 
 const ProfileBox = styled.div`
-  width: 500px;
-  height: 60px;
+    width: 500px;
+    height: 60px;
 `;
 
 const BsThreeDotsVerticalStyle = styled.div`
-  font-size: 30px;
+    font-size: 30px;
 `;
 
 const OuterBox = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 `;
 
 const ImgBox = styled.div`
-  background-image: url(${({ url }) => url});
-  background-repeat: no-repeat;
-  background-size: cover;
-  margin: 10px auto 10px auto;
-  width: 680px;
-  height: 300px;
-  border-radius: 15px;
+    background-image: url(${({ url }) => url});
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: 10px auto 10px auto;
+    width: 680px;
+    height: 300px;
+    border-radius: 15px;
 `;
 
 const LocationBox = styled.div`
-  color: #fff;
-  display: inline-block;
-  padding: 0px 5px;
-  border-radius: 5px;
-  position: relative;
-  top: 91%;
-  left: 1%;
-  background-color: rgba(0, 0, 0, 0.628);
+    color: #fff;
+    display: inline-block;
+    padding: 0px 5px;
+    border-radius: 5px;
+    position: relative;
+    top: 91%;
+    left: 1%;
+    background-color: rgba(0, 0, 0, 0.628);
 `;
 
 const Desc = styled.div``;
 
 const Tag = styled.div`
-  height: 30px;
-  margin: 10px 0px;
-  display: flex;
+    height: 30px;
+    margin: 10px 0px;
+    display: flex;
 `;
 
 const TagButton = styled.div`
-  margin: 0px 3px;
-  padding: 2px 6px;
-  border-radius: 4px;
+    margin: 0px 3px;
+    padding: 2px 6px;
+    border-radius: 4px;
 
-  background-color: #dddddd;
+    background-color: #dddddd;
 `;
 
 const Rest = styled.div`
-  border-radius: 10px;
-  padding: 10px;
-  border: 1px solid ${subTitleColorCode};
+    border-radius: 10px;
+    padding: 10px;
+    border: 1px solid ${subTitleColorCode};
 `;
 
 const RestName = styled.div`
-  font-weight: 700;
+    font-weight: 700;
 `;
 const RestLocation = styled.div`
-  color: gray;
-  font-weight: 300;
+    color: gray;
+    font-weight: 300;
+`;
+
+const LikesButton = styled.button`
+    border: none;
+    background-color: white;
 `;
