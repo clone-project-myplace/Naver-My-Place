@@ -3,7 +3,7 @@ import styled from "styled-components";
 import defaultProfileImg from "../assets/default_profile.jpeg";
 import { HiPencil } from "react-icons/hi";
 import { useMutation } from "react-query";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { Navbar } from "react-bootstrap";
 import { HiArrowLeft } from "react-icons/hi2";
@@ -16,60 +16,66 @@ const UserProfileEdit = () => {
     const [file, setFile] = useState("");
     const [isStored, setIsStored] = useState(false);
 
-  const onImgPostHandler = (event) => {
-    setNewImage([]);
-    for (let i = 0; i < event.target.files.length; i++) {
-      setFile(event.target.files[i]);
-      let reader = new FileReader();
-      reader.readAsDataURL(event.target.files[i]);
-      reader.addEventListener("loaded", (event) => {
-        newimage.src = event.target.result;
-      });
-      reader.onloadend = () => {
-        const base = reader.result;
-        if (base) {
-          const baseSub = base.toString();
-          setNewImage((newimage) => [...newimage, baseSub]);
+    const location = useLocation();
+
+    console.log(location.state)
+    const receivedNickname = location.state.currentNickname;
+    const receivedImgUrl = location.state.currentImgUrl;
+
+
+    const onImgPostHandler = (event) => {
+        setNewImage([]);
+        for (let i = 0; i < event.target.files.length; i++) {
+            setFile(event.target.files[i]);
+            let reader = new FileReader();
+            reader.readAsDataURL(event.target.files[i]);
+            reader.addEventListener("loaded", (event) => {
+                newimage.src = event.target.result;
+            });
+            reader.onloadend = () => {
+                const base = reader.result;
+                if (base) {
+                    const baseSub = base.toString();
+                    setNewImage((newimage) => [...newimage, baseSub]);
+                }
+            };
         }
-      };
-    }
-  };
 
-  const fileInput = useRef();
+        setIsStored(true);
+    };
 
-  const onImgButton = (event) => {
-    event.preventDefault();
-    fileInput.current.click();
-  };
+    const fileInput = useRef();
 
-  const mutation = useMutation(() => uploadProfile(formData, accessToken));
+    const onImgButton = (event) => {
+        event.preventDefault();
+        fileInput.current.click();
+    };
 
-  const formData = new FormData();
+    const mutation = useMutation(() => uploadProfile(formData, accessToken));
 
+    const formData = new FormData();
 
-  const onSubmitPostHandler = async (event) => {
-    event.preventDefault();
+    const onSubmitPostHandler = async (event) => {
+        event.preventDefault();
 
-    formData.append("imgUrl", file);
+        formData.append("imgUrl", file);
+        setIsStored(true);
+        mutation.mutate(formData);
+        alert("업로드 완료!");
+    };
 
-    mutation.mutate(formData);
-    alert("업로드 완료!");
-  };
+    const navigate = useNavigate();
 
-  const navigate = useNavigate();
-
-  const navToHome = () => {
-    navigate("/");
-  };
-
-
+    const navToHome = () => {
+        navigate("/");
+    };
 
     //useEffect 써서 저장하기 눌렀을때 프로필에 사진 보여주기 가능?
-  const handleOnClickLogOutBtn = () => {
-    localStorage.removeItem("accessToken");
-    alert("로그아웃!");
-    window.location.replace("/");
-  };
+    const handleOnClickLogOutBtn = () => {
+        localStorage.removeItem("accessToken");
+        alert("로그아웃!");
+        window.location.replace("/");
+    };
 
     return (
         <>
@@ -100,14 +106,13 @@ const UserProfileEdit = () => {
                                     <img
                                         style={ProfileImg}
                                         //사진 여기로 전달 받기!
-                                        src='https://avatars.githubusercontent.com/u/109452831?v=4'
+                                        src={newimage}
                                         alt='profile image'
                                     />
                                 ) : (
                                     <img
                                         style={ProfileImg}
-                                        //승호님께 받은 url
-                                        src='https://avatars.githubusercontent.com/u/109452831?v=4'
+                                        src={receivedImgUrl}
                                         alt='profile image'
                                     />
                                 )}
@@ -125,11 +130,15 @@ const UserProfileEdit = () => {
                         />
                         <NicknameArea>
                             <Label>닉네임</Label>
-                            <input type='text' />
+                            <input type='text' 
+                            value={receivedNickname}
+                            readOnly
+                            />
                             <Label>소개</Label>
                             <textarea
                                 type='text'
                                 placeholder='예. 분당구  빵집 & 케이크 맛집 탐험가'
+                                readOnly
                             />
                         </NicknameArea>
                         <StyledButton background='#00b49b' color='#fff'>
@@ -151,32 +160,32 @@ const UserProfileEdit = () => {
 export default UserProfileEdit;
 
 const ProfileLayout = styled.div`
-  max-width: 720px;
-  margin: 0 auto;
+    max-width: 720px;
+    margin: 0 auto;
 `;
 
 const ProfileImg = {
-  padding: "2px",
-  borderRadius: "50%",
-  width: "60px",
-  height: "60px",
+    padding: "2px",
+    borderRadius: "50%",
+    width: "60px",
+    height: "60px",
 };
 
 const ProfileArea = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
 `;
 
 const Title = styled.div`
-  font-weight: bold;
-  font-size: 20px;
+    font-weight: bold;
+    font-size: 20px;
 `;
 
 const Label = styled.div`
-  color: #8f8f8f;
-  display: block;
-  font-weight: ${(props) => props.fontWeight};
+    color: #8f8f8f;
+    display: block;
+    font-weight: ${(props) => props.fontWeight};
 `;
 
 const EditPencilArea = styled.div`
@@ -192,50 +201,49 @@ const EditPencilArea = styled.div`
     justify-content: center;
     align-items: center;
     background-color: rgb(256, 256, 256, 0.8);
-
 `;
 
 const NicknameArea = styled.div`
-  input {
-    box-sizing: border-box;
-    height: 46px;
-    width: 100%;
-    outline: none;
-    border-radius: 8px;
-    padding: 0 12px;
-    font-size: 14px;
-    border: 1px solid #eee;
-  }
-  textarea {
-    width: 100%;
-    border: 1px solid #eee;
-    box-sizing: border-box;
-    border-radius: 8px;
-    padding: 12px;
-    font-size: 14px;
-    margin-bottom: 20px;
-  }
+    input {
+        box-sizing: border-box;
+        height: 46px;
+        width: 100%;
+        outline: none;
+        border-radius: 8px;
+        padding: 0 12px;
+        font-size: 14px;
+        border: 1px solid #eee;
+    }
+    textarea {
+        width: 100%;
+        border: 1px solid #eee;
+        box-sizing: border-box;
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
 `;
 
 const StButton = styled.div`
-  border: none;
-  cursor: pointer;
+    border: none;
+    cursor: pointer;
 `;
 
 const StyledButton = styled.button`
-  margin-bottom: 10px;
-  width: 100%;
-  height: 50px;
-  border-radius: 10px;
-  border: none;
-  background: ${(props) => props.background};
-  font-size: 20px;
-  font-weight: 700;
-  color: ${(props) => props.color};
+    margin-bottom: 10px;
+    width: 100%;
+    height: 50px;
+    border-radius: 10px;
+    border: none;
+    background: ${(props) => props.background};
+    font-size: 20px;
+    font-weight: 700;
+    color: ${(props) => props.color};
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-  cursor: pointer;
+    cursor: pointer;
 `;
