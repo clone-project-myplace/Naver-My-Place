@@ -3,15 +3,18 @@ import styled from "styled-components";
 
 import defaultProfileImg from "../assets/default_profile.jpeg";
 import { HiPencil } from "react-icons/hi";
+import { naverColorCode, subTitleColorCode } from "../constants/colorCode";
+
+import { Container } from "react-bootstrap";
+
 import { useMutation } from "react-query";
 import { uploadProfile } from "../axios/api";
-
-import { Navbar} from "react-bootstrap";
-import { HiArrowLeft } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
 
-const UserProfileEdit = () => {
+import { Navbar } from "react-bootstrap";
+import { HiArrowLeft } from "react-icons/hi2";
 
+const UserProfileEdit = () => {
     const [newimage, setNewImage] = useState("");
     const [file, setFile] = useState("");
 
@@ -66,7 +69,7 @@ const UserProfileEdit = () => {
         localStorage.removeItem("accessToken");
         alert("로그아웃!");
         window.location.replace("/");
-    }
+    };
 
     return (
         <>
@@ -119,12 +122,16 @@ const UserProfileEdit = () => {
                                 placeholder='예. 분당구  빵집 & 케이크 맛집 탐험가'
                             />
                         </NicknameArea>
-                        <StyledButton background="#00b49b" color="#fff">저장하기</StyledButton>
+                        <StyledButton background='#00b49b' color='#fff'>
+                            저장하기
+                        </StyledButton>
                     </form>
-                        <StyledButton 
+                    <StyledButton
                         onClick={handleOnClickLogOutBtn}
-                        color="#342e2e"
-                        >로그아웃</StyledButton>
+                        color='#342e2e'
+                    >
+                        로그아웃
+                    </StyledButton>
                 </ProfileLayout>
             </div>
         </>
@@ -154,7 +161,6 @@ const ProfileArea = styled.div`
 const Title = styled.div`
     font-weight: bold;
     font-size: 20px;
-
 `;
 
 const Label = styled.div`
@@ -205,7 +211,7 @@ const StButton = styled.div`
 `;
 
 const StyledButton = styled.button`
-margin-bottom: 10px;
+    margin-bottom: 10px;
     width: 100%;
     height: 50px;
     border-radius: 10px;
@@ -221,4 +227,3 @@ margin-bottom: 10px;
 
     cursor: pointer;
 `;
-

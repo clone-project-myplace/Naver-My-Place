@@ -30,11 +30,13 @@ function Write() {
   const { mode } = useParams();
   const location = useLocation();
 
+
   if (mode === "edit") {
     console.log("location.state", location.state);
     console.log("location.state.", location.state.detailData.reviewContents);
     console.log("params", mode);
   }
+
 
   //이중 for
   // const [files, setFiles] = useState("");

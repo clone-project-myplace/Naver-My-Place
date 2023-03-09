@@ -10,20 +10,19 @@ import { subTitleColorCode } from "../../constants/colorCode";
 import { AiOutlineHeart} from "react-icons/ai";
 
 const FeedCard = ({ item }) => {
-    const navigate = useNavigate();
-    const goToDatailPage = (id) => {
-        navigate(`/detail/${id}`);
-    };
-    console.log(item);
+  const navigate = useNavigate();
+  const goToDatailPage = (id) => {
+    navigate(`/detail/${id}`);
+  };
 
-    return (
-        <div>
-            <FeedBox onClick={() => goToDatailPage(item.reviewId)}>
-                <OuterBox>
-                    <ProfileBox>
-                        <UserProfile />
-                    </ProfileBox>
-                    <div style={{ display: "flex" }}>
+  return (
+    <div>
+      <FeedBox onClick={() => goToDatailPage(item.reviewId)}>
+        <OuterBox>
+          <ProfileBox>
+            <UserProfile profileImg={item.profileImgUrl} />
+          </ProfileBox>
+          <div style={{ display: "flex" }}>
                         <LikesButton
                             onClick={(e) => {
                                 e.stopPropagation();
@@ -36,35 +35,36 @@ const FeedCard = ({ item }) => {
                             <BsThreeDotsVertical />
                         </BsThreeDotsVerticalStyle>
                     </div>
-                </OuterBox>
-                <ImgBox url={item.reviewImgUrl}>
-                    <LocationBox>
-                        <BiMap />
-                        {item.restaurantAddress}
-                    </LocationBox>
-                </ImgBox>
-                <Desc>{item.reviewContents}</Desc>
-                <Tag>
-                    <TagButton>{item.keywordList[0]}</TagButton>
-                    <TagButton>+{item.keywordList.length - 1}</TagButton>
-                </Tag>
-                <Rest>
-                    <RestName>{item.restaurantName} &gt;</RestName>
-                    <RestLocation>{item.restaurantAddress}</RestLocation>
-                </Rest>
-            </FeedBox>
-        </div>
-    );
+        </OuterBox>
+        <ImgBox url={item.reviewImgUrl}>
+          <LocationBox>
+            <BiMap />
+            {item.restaurantAddress}
+          </LocationBox>
+        </ImgBox>
+        <Desc>{item.reviewContents}</Desc>
+        <Tag>
+          <TagButton>{item.keywordList[0]}</TagButton>
+          <TagButton>+{item.keywordList.length - 1}</TagButton>
+        </Tag>
+        <Rest>
+          <RestName>{item.restaurantName} &gt;</RestName>
+          <RestLocation>{item.restaurantAddress}</RestLocation>
+        </Rest>
+      </FeedBox>
+    </div>
+  );
 };
 
 export default FeedCard;
 
 const FeedBox = styled.div`
-    margin: 0 auto;
-    height: 560px;
-    width: 700px;
-    padding: 10px;
-    margin-top: 20px;
+  margin: 0 auto;
+  height: 560px;
+  width: 700px;
+  padding: 10px;
+  margin-top: 20px;
+  background-color: #fff;
 `;
 
 const ProfileBox = styled.div`
@@ -120,20 +120,20 @@ const TagButton = styled.div`
 `;
 
 const Rest = styled.div`
-    border-radius: 10px;
-    padding: 10px;
-    border: 1px solid ${subTitleColorCode};
+  border-radius: 10px;
+  padding: 10px;
+  border: 1px solid rgb(0, 0, 0, 0.2);
 `;
 
 const RestName = styled.div`
     font-weight: 700;
 `;
 const RestLocation = styled.div`
-    color: gray;
-    font-weight: 300;
+  color: gray;
+  font-weight: 400;
 `;
 
 const LikesButton = styled.button`
-    border: none;
-    background-color: white;
+border: none;
+background-color: white;
 `;
