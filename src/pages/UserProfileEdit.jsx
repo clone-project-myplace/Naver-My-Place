@@ -10,11 +10,11 @@ import { HiArrowLeft } from "react-icons/hi2";
 import { uploadProfile } from "../api/getDetail";
 
 const UserProfileEdit = () => {
-
     const accessToken = window.localStorage.getItem("accessToken");
 
     const [newimage, setNewImage] = useState("");
     const [file, setFile] = useState("");
+    const [isStored, setIsStored] = useState(false);
 
     const onImgPostHandler = (event) => {
         setNewImage([]);
@@ -42,15 +42,16 @@ const UserProfileEdit = () => {
         fileInput.current.click();
     };
 
-    const mutation = useMutation(() => uploadProfile(formData,accessToken));
-
+    const mutation = useMutation(() => uploadProfile(formData, accessToken), {
+        onSuccess: () => {
+            alert("성공!");
+        },
+    });
 
     const formData = new FormData();
 
     const onSubmitPostHandler = async (event) => {
         event.preventDefault();
-
-   
 
         formData.append("imgUrl", file);
 
@@ -69,6 +70,8 @@ const UserProfileEdit = () => {
         alert("로그아웃!");
         window.location.replace("/");
     };
+
+    //useEffect 써서 저장하기 눌렀을때 프로필에 사진 보여주기 가능?
 
     return (
         <>
@@ -95,11 +98,21 @@ const UserProfileEdit = () => {
                     >
                         <ProfileArea>
                             <StButton onClick={onImgButton}>
-                                <img
-                                    style={ProfileImg}
-                                    src={defaultProfileImg}
-                                    alt='profile image'
-                                />
+                                {isStored ? (
+                                    <img
+                                        style={ProfileImg}
+                                        //사진 여기로 전달 받기!
+                                        src='https://avatars.githubusercontent.com/u/109452831?v=4'
+                                        alt='profile image'
+                                    />
+                                ) : (
+                                    <img
+                                        style={ProfileImg}
+                                        //승호님께 받은 url
+                                        src='https://avatars.githubusercontent.com/u/109452831?v=4'
+                                        alt='profile image'
+                                    />
+                                )}
                             </StButton>
                             <EditPencilArea>
                                 <HiPencil />
@@ -172,7 +185,7 @@ const EditPencilArea = styled.div`
     background-color: gray;
     position: relative;
     right: 20px;
-    top: 15px;
+    top: 37px;
     border-radius: 70%;
     overflow: hidden;
     width: 20px;
@@ -180,6 +193,7 @@ const EditPencilArea = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: rgb(256, 256, 256, 0.8);
 `;
 
 const NicknameArea = styled.div`
