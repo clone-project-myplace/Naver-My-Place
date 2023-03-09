@@ -23,15 +23,28 @@ import {
   ReviewBtnTitle,
   ReviewBtnSubTitle,
 } from "./style";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 function Write() {
+  const navigate = useNavigate();
+  const { mode } = useParams();
+  const location = useLocation();
+
+
+  if (mode === "edit") {
+    console.log("location.state", location.state);
+    console.log("location.state.", location.state.detailData.reviewContents);
+    console.log("params", mode);
+  }
+
+
   //이중 for
-
-  const [Arr, setArr] = useState([]);
   // const [files, setFiles] = useState("");
-
+  const [Arr, setArr] = useState([]);
   const [click, setClick] = useState("true");
   const [clickBtn, setClickBtn] = useState("white");
+
+  console.log(Arr);
 
   const [click2, setClick2] = useState("true");
   const [clickBtn2, setClickBtn2] = useState("white");
@@ -342,9 +355,9 @@ function Write() {
     formData.append("reviewKeywordList", Arr);
     formData.append("reviewPhotoUrl", file);
     formData.append("reviewContents", reviewContent);
-    console.log("Arr", Arr);
-    console.log("file", file);
-    console.log("reviewContent", reviewContent);
+    // console.log("Arr", Arr);
+    // console.log("file", file);
+    // console.log("reviewContent", reviewContent);
 
     // console.log(
     //   "formData.get(reviewKeywordList)",
@@ -356,7 +369,6 @@ function Write() {
     mutation.mutate(formData);
     // alert("업로드 완료!");
   };
-  console.log(Arr);
 
   return (
     <MainContainer>
@@ -680,11 +692,19 @@ function Write() {
         <ImgBox src={newimage} alt="img" /> */}
 
         <div>
-          <Textarea
-            placeholder="내용을 적어주세요"
-            onChange={onReviewContentHandler}
-            value={reviewContent}
-          />
+          {mode === "edit" ? (
+            <Textarea
+              placeholder="내용을 적어주세요"
+              onChange={onReviewContentHandler}
+              value={location.state.detailData.reviewContents}
+            />
+          ) : (
+            <Textarea
+              placeholder="내용을 적어주세요"
+              onChange={onReviewContentHandler}
+              value={reviewContent}
+            />
+          )}
         </div>
         <button>등록하기</button>
       </form>

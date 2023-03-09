@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { naverColorCode } from "../constants/colorCode";
 
-const LoginSignupButtonStyle = styled.div`
+const LoginSignupButtonStyle = styled.button`
   cursor: pointer;
   background-color: ${naverColorCode};
   color: #fff;
@@ -13,6 +13,7 @@ const LoginSignupButtonStyle = styled.div`
   height: 10vh;
   display: table-cell;
   vertical-align: middle;
+  border: none;
 `;
 
 export default LoginSignupButtonStyle;

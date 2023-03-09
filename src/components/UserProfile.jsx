@@ -48,7 +48,7 @@ const UserProfile = ({ editable }) => {
   if (editable) {
     return (
       <div>
-        <ProfileArea>
+        <ProfileAreatop>
           <img
             style={ProfileImg}
             src={defaultProfileImg}
@@ -62,7 +62,8 @@ const UserProfile = ({ editable }) => {
             <Nickname>닉네임</Nickname>
             <PostingInfo>사진리뷰 40 3.2 목</PostingInfo>
           </div>
-        </ProfileArea>
+        </ProfileAreatop>
+
         <ReactModal isOpen={isOpen}>
           <Container>
             <form>
@@ -79,7 +80,7 @@ const UserProfile = ({ editable }) => {
                 <div>소개</div>
                 <textarea
                   type="text"
-                  placeholder="예. 분당구  빵집 & 케이크 맛집 탐험가"
+                  placeholder="예. 분당구 빵집 & 케이크 맛집 탐험가"
                 />
               </NicknameArea>
             </form>
@@ -109,7 +110,10 @@ const ProfileImg = {
   width: "60px",
   height: "60px",
 };
-
+const ProfileAreatop = styled.div`
+  display: flex;
+  margin: 0 auto;
+`;
 const ProfileArea = styled.div`
   display: flex;
 `;
@@ -152,4 +156,6 @@ const NicknameArea = styled.div`
   }
 `;
 
-const NickNameInput = styled.div``;
+const NickNameInput = styled.div`
+  margin-left: 10px;
+`;
