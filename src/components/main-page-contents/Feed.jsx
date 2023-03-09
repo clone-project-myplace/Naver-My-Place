@@ -3,27 +3,19 @@ import FeedCard from "./FeedCard";
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Card } from "react-bootstrap";
-import { useDispatch } from "react-redux";
-import { setProfileImgUrlAction } from "../../contexts/reducers/loginProfileImgSlice";
 
 const Feed = () => {
   // //무한 스크롤 관련
   const pageEnd = useRef();
-  const dispatch = useDispatch();
   const [dataList, setDataList] = useState([]);
   const [page, setPage] = useState(0); //스크롤이 닿았을 때 새롭게 데이터 페이지를 바꿀 state
   const [loading, setLoading] = useState(false); //로딩 성공, 실패를 담을 state
   const [isLastPage, setIsLastPage] = useState(false);
-  const [loginProfileImgUrl, setLoginProfileImgUrl] = useState("");
 
   const fetchPins = async (page) => {
     axios
       .get(`${process.env.REACT_APP_BASEURL}/api/reviews?page=${page}`)
       .then((res) => {
-        if (loginProfileImgUrl !== res.data.data.loginProfileImgUrl) {
-          setLoginProfileImgUrl(res.data.data.loginProfileImgUrl);
-          dispatch(setProfileImgUrlAction(res.data.data.loginProfileImgUrl));
-        }
         setIsLastPage(res.data.data.isLastPage);
         setDataList((prev) => [...prev, ...res.data.data.reviewList]);
       });
