@@ -65,7 +65,7 @@ const UserProfile = ({ editable, profileImg, reviewCountt }) => {
       <img style={ProfileImg} src={profileImg} alt="profile image" />
       {/* src에 이미지 경로 */}
       <div>
-        <NickNameInput>닉네임</NickNameInput>
+        <NickNameInput>{currentNickname}</NickNameInput>
         <PostingInfo>사진리뷰 {reviewCountt}</PostingInfo>
       </div>
     </ProfileArea>

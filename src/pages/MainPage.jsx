@@ -28,6 +28,10 @@ const MainPage = () => {
     navigate("/login");
   };
 
+  const reviewWriteHanlder = () => {
+    setSelectedTab("방문");
+  };
+
   const contents = () => {
     switch (selectedTab) {
       case "피드":
@@ -78,7 +82,9 @@ const MainPage = () => {
           </div>
         )}
         <div>
-          <ReviewWriteButton>리뷰 쓰기</ReviewWriteButton>
+          <ReviewWriteButton onClick={reviewWriteHanlder}>
+            리뷰 쓰기
+          </ReviewWriteButton>
         </div>
       </MyProfileArea>
       <TabsOuter>

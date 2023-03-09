@@ -32,7 +32,9 @@ const Login = () => {
   return (
     <Container>
       <FormStyle onSubmit={handleSubmit((data) => postLogin(data))}>
-        <LogoStyle style={{ marginBottom: "30px" }}>NAVER</LogoStyle>
+        <LogoStyle style={{ marginBottom: "30px", marginLeft: "18vw" }}>
+          NAVER
+        </LogoStyle>
         <IdInput>
           <CiUser />
           <InputStyle
