@@ -78,9 +78,6 @@ const Feed = () => {
           This is End
         </LoadMore>
       )}
-      {/* <LoadMore style={{ position: "absolute", bottom: "-50px" }} ref={pageEnd}>
-        This is End
-      </LoadMore> */}
     </div>
   );
 };
