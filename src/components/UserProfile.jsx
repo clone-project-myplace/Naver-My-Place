@@ -1,22 +1,28 @@
 import styled from "styled-components";
-import defaultProfileImg from "../assets/default_profile.jpeg";
 import { HiPencil } from "react-icons/hi";
-import {
-  navbarColorCode,
-  naverColorCode,
-  subTitleColorCode,
-} from "../constants/colorCode";
+import { navbarColorCode, subTitleColorCode } from "../constants/colorCode";
 import { useNavigate } from "react-router-dom";
-import { Container } from "react-bootstrap";
 import { useSelector } from "react-redux";
+import jwt_decode from "jwt-decode";
+import { useEffect } from "react";
 
 const UserProfile = ({ editable, profileImg }) => {
   const navigate = useNavigate();
   const loginProfileImgUrl = useSelector(
     (state) => state.loginProfileImgSlice.url
   );
+  const accessToken = window.localStorage.getItem("accessToken");
+  const decoded = jwt_decode(accessToken);
+  const loginedUserNickname = decoded.sub;
+
   const goToEditPage = () => {
-    navigate("/myprofile");
+    const config = {
+      state: {
+        currentNickname: loginedUserNickname,
+        currentImgUrl: loginProfileImgUrl,
+      },
+    };
+    navigate("/myprofile", config);
   };
 
   if (editable) {
@@ -39,7 +45,7 @@ const UserProfile = ({ editable, profileImg }) => {
           <HiPencil color={navbarColorCode} />
         </EditPencilArea>
         <div style={{ position: "relative", top: "5px" }}>
-          <div align="left">닉네임</div>
+          <div align="left">{loginedUserNickname}</div>
           <div align="left">사진리뷰 40 3.2 목</div>
         </div>
       </div>
@@ -65,17 +71,9 @@ const ProfileImg = {
   width: "60px",
   height: "60px",
 };
-const ProfileAreatop = styled.div`
-  display: flex;
-  margin: 0 auto;
-`;
+
 const ProfileArea = styled.div`
   display: flex;
-`;
-
-const Nickname = styled.div`
-  font-weight: 800;
-  margin-left: 10px;
 `;
 
 const PostingInfo = styled.div`
@@ -96,19 +94,6 @@ const EditPencilArea = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-const NicknameArea = styled.div`
-  input {
-    background-color: gray;
-    border: 1px solid yellow;
-    padding: 10px;
-    width: 100%;
-  }
-  textarea {
-    width: 100%;
-    padding: 10px;
-  }
 `;
 
 const NickNameInput = styled.div`
