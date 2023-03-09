@@ -6,9 +6,13 @@ import defaultProfileImg from "../../assets/default_profile.jpeg";
 const ReviewCard = ({ item }) => {
   const navigate = useNavigate();
   const goToDetailPage = (id) => {
-    navigate(`/detail/${id}`);
+    navigate(`/detail/${id}`, {
+      state: {
+        restaurantId: item.reviewId,
+      },
+    });
   };
-
+  console.log(item);
   return (
     <div onClick={goToDetailPage}>
       <Picture>

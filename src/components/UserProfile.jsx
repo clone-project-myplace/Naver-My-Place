@@ -6,8 +6,10 @@ import ReactModal from "react-modal";
 import { useCallback, useRef, useState } from "react";
 import { Container } from "react-bootstrap";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const UserProfile = ({ editable }) => {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const inputRef = useRef(null);
   const editModalOnHandler = () => {
@@ -38,6 +40,9 @@ const UserProfile = ({ editable }) => {
       });
   }, []);
 
+  const goToEditPage = () => {
+    navigate("/myprofile");
+  };
   const onUploadImageButtonClick = useCallback(() => {
     if (!inputRef.current) {
       return;
@@ -53,9 +58,9 @@ const UserProfile = ({ editable }) => {
             style={ProfileImg}
             src={defaultProfileImg}
             alt="profile image"
-            onClick={editModalOnHandler}
+            onClick={goToEditPage}
           />
-          <EditPencilArea onClick={editModalOnHandler}>
+          <EditPencilArea onClick={goToEditPage}>
             <HiPencil />
           </EditPencilArea>
           <div>
@@ -63,30 +68,6 @@ const UserProfile = ({ editable }) => {
             <PostingInfo>사진리뷰 40 3.2 목</PostingInfo>
           </div>
         </ProfileAreatop>
-
-        <ReactModal isOpen={isOpen}>
-          <Container>
-            <form>
-              <input
-                type="file"
-                accept="image/*"
-                ref={inputRef}
-                onChange={onUploadImage}
-              />
-              <button onClick={onUploadImageButtonClick}>이미지 업로드</button>
-              <NicknameArea>
-                <div>닉네임</div>
-                <input type="text" />
-                <div>소개</div>
-                <textarea
-                  type="text"
-                  placeholder="예. 분당구 빵집 & 케이크 맛집 탐험가"
-                />
-              </NicknameArea>
-            </form>
-            <button onClick={() => setIsOpen(false)}>닫기</button>
-          </Container>
-        </ReactModal>
       </div>
     );
   }
