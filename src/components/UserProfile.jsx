@@ -12,7 +12,7 @@ const UserProfile = ({ editable, profileImg }) => {
     return state.loginProfileImgSlice.url;
   });
   const accessToken = window.localStorage.getItem("accessToken");
-  const decoded = jwt_decode(accessToken);
+  const decoded = accessToken ? jwt_decode(accessToken) : "";
   const loginedUserNickname = decoded.sub;
 
   const goToEditPage = () => {
