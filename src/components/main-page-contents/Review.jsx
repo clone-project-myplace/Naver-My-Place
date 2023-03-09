@@ -52,23 +52,23 @@ const Review = () => {
   }
 
   // 방문한 곳이 없을때 처리
-  // if (reviewList?.length == 0) {
-  //   return (
-  //     <Container style={{ margin: "50px" }}>
-  //       <div class="card text-center">
-  //         <div class="card-header">방문한 곳이 없습니다.</div>
-  //         <div class="card-body">
-  //           <h5 class="card-title">여러분의 후기를 들려주세요</h5>
-  //           <p class="card-text"></p>
-  //           <a href="#" class="btn btn-primary">
-  //             방문하러가기
-  //           </a>
-  //         </div>
-  //         <div class="card-footer text-muted">MY 플레이스</div>
-  //       </div>
-  //     </Container>
-  //   );
-  // }
+  if (reviewList?.length == 0) {
+    return (
+      <Container style={{ margin: "50px" }}>
+        <div class="card text-center">
+          <div class="card-header">방문한 곳이 없습니다.</div>
+          <div class="card-body">
+            <h5 class="card-title">여러분의 후기를 들려주세요</h5>
+            <p class="card-text"></p>
+            <a href="#" class="btn btn-primary">
+              방문하러가기
+            </a>
+          </div>
+          <div class="card-footer text-muted">MY 플레이스</div>
+        </div>
+      </Container>
+    );
+  }
 
   return (
     <Container style={{ display: "flex", justifyContent: "center" }}>
