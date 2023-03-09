@@ -1,7 +1,11 @@
 import styled from "styled-components";
 import defaultProfileImg from "../assets/default_profile.jpeg";
 import { HiPencil } from "react-icons/hi";
-import { subTitleColorCode } from "../constants/colorCode";
+import {
+  navbarColorCode,
+  naverColorCode,
+  subTitleColorCode,
+} from "../constants/colorCode";
 import { useNavigate } from "react-router-dom";
 import { Container } from "react-bootstrap";
 
@@ -29,7 +33,7 @@ const UserProfile = ({ editable, profileImg }) => {
           onClick={goToEditPage}
         />
         <EditPencilArea onClick={goToEditPage}>
-          <HiPencil />
+          <HiPencil color={navbarColorCode} />
         </EditPencilArea>
         <div style={{ position: "relative", top: "5px" }}>
           <div align="left">닉네임</div>
@@ -78,7 +82,7 @@ const PostingInfo = styled.div`
 `;
 
 const EditPencilArea = styled.div`
-  background-color: gray;
+  background-color: rgb(256, 256, 256, 0.8);
   position: relative;
   right: 20px;
   top: 38px;
