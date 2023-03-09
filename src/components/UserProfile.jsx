@@ -8,9 +8,9 @@ import { useEffect } from "react";
 
 const UserProfile = ({ editable, profileImg }) => {
   const navigate = useNavigate();
-  const loginProfileImgUrl = useSelector(
-    (state) => state.loginProfileImgSlice.url
-  );
+  const loginProfileImgUrl = useSelector((state) => {
+    return state.loginProfileImgSlice.url;
+  });
   const accessToken = window.localStorage.getItem("accessToken");
   const decoded = jwt_decode(accessToken);
   const loginedUserNickname = decoded.sub;
